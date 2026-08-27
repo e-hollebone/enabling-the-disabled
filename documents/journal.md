@@ -20,3 +20,10 @@ Time-based record of major interactions and initiatives. Each entry captures wha
 - **What:** Created this journal and the effort log (`effort-log.csv`) in the repo.
 - **Outcome:** Time-based record of interactions and effort tracking are now in place.
 - **Next:** Begin logging effort and journaling initiatives as work proceeds.
+
+### Drive Admin Folder Setup
+- **What:** Created an admin folder at `My Drive > Clients > Enabling the Disabled - Admin` — one level up from the shared business folder. Created Effort Log (Google Sheet) and Journal (Google Doc) inside it.
+- **Outcome:** Working tracking docs are outside the shared output folder, keeping internal operations separate from external-facing materials.
+- **Structure:**
+  - `My Drive > Clients > Enable the Disabled - Shaun Kehoe/` — shared output (read-only)
+  - `My Drive > Clients > Enabling the Disabled - Admin/` — our working folder (Effort Log, Journal)
