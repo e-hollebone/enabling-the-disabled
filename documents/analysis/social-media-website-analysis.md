@@ -69,7 +69,23 @@
 
 ## Facebook — SPFKPT33
 
-**Status:** Public page content not accessible without login. No analysis possible at this time.
+**Captured:** 2026-08-27 (direct public web fetch — historical/indexed posts only; live feed is a login wall, see Gap in `facebook-analysis.md`)
+**Page:** "Shaun Kehoe's Personal Training" — ~759 likes, 3 talking about this.
+
+### Content themes (from captured posts)
+- **Mission framing:** "Enable the Disabled" — fitness as rehabilitation/empowerment for people with disabilities.
+- **Disability communities named:** epilepsy, hydrocephalus, cerebral palsy, autism, muscular dystrophy, depression, anxiety.
+- **Relationship-first coaching:** "show them you are a real friend that cares... not just some exercise robot."
+- **Personal survival narrative:** brain surgeries, seizures — used as credibility/motivation.
+- **Recurring hashtags:** #enablethedisabled #missioninlife #cerebral_palsy #motivation #fitness #inspiration
+
+### Sample captured posts
+1. "Exercise helped save my life!... despite all of my brain surgeries, seizures, and voices in my head..." (Jul 3, 2021) — Garth Brooks lyric quote.
+2. "One of the main lessons I learned early was that if you are not willing to build a strong, meaningful and wholesome relationship with people that have disabilities you're in the wrong career... Matt and I dancing to In the Navy!"
+3. "Unbelievable sessions! #enablethedisabled #missioninlife #cerebral_palsy #motivation #fitness"
+4. "Adapting and working hard! #enablethedisabled #missioninlife #autism #cerebral_palsy #inspiration" (comment: "you definitely are a super hero...")
+
+> Full text + URLs: `documents/analysis/facebook-analysis.md`. Recent (Jul–Aug 2026) posts NOT captured — login wall; needs Kasm browser or Eric relay.
 
 ---
 
