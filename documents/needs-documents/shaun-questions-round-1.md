@@ -1,6 +1,6 @@
 # Building Your Business Profile — Round 1 of 3
 
-Hi Shaun — this is the first short set of questions so I can build a proper business profile for Enable the Disabled. It takes about 5 minutes. Answer what you can; rough numbers are fine. There will be two more short rounds after this.
+Hi Shaun — this is the first short set of questions so I can build a proper business profile for Enable the Disabled. It takes about 15 minutes. Answer what you can; rough numbers are fine. There will be two rounds after this.
 
 Just type your answers in the lines under each question and send it back when you can.
 

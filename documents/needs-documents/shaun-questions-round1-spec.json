@@ -1,0 +1,38 @@
+{
+  "page": {"width_mm": 215.9, "height_mm": 279.4, "margins_mm": {"top": 25, "bottom": 25, "left": 25, "right": 25}},
+  "header": "Enable the Disabled — Business Profile, Round 1 of 3",
+  "footer": "Prepared by Eric (fitness-strategist) for Shaun Kehoe",
+  "footer_page_numbers": true,
+  "styles": [
+    {"name": "AnswerLine", "base": "Normal", "font": "Calibri", "size_pt": 12, "color": "1F4E79"}
+  ],
+  "blocks": [
+    {"type": "heading", "level": 1, "text": "Building Your Business Profile — Round 1 of 3"},
+    {"type": "paragraph", "text": "Hi Shaun — this is the first short set of questions so I can build a proper business profile for Enable the Disabled. It takes about 15 minutes. Answer what you can; rough numbers are fine. There will be two rounds after this."},
+    {"type": "paragraph", "text": "Just type your answers in the lines under each question and send it back when you can."},
+
+    {"type": "heading", "level": 2, "text": "Question 1 — Client Count"},
+    {"type": "paragraph", "text": "How many active clients do you have right now?"},
+    {"type": "paragraph", "text": "(An \"active client\" is someone you've trained in the last 30 days.)"},
+    {"type": "paragraph", "style": "AnswerLine", "text": "Your answer: ________________________________________________________"},
+
+    {"type": "heading", "level": 2, "text": "Question 2 — Monthly Revenue"},
+    {"type": "paragraph", "text": "What is your average monthly revenue?"},
+    {"type": "paragraph", "text": "(Just the top-line number — what hits your bank account each month from the business.)"},
+    {"type": "paragraph", "style": "AnswerLine", "text": "Your answer: $___________ / month"},
+
+    {"type": "heading", "level": 2, "text": "Question 3 — Session Rate"},
+    {"type": "paragraph", "text": "What do you charge for one individual training session?"},
+    {"type": "paragraph", "text": "(If you have different rates for different situations, list them — e.g., in-home vs. gym, individual vs. group.)"},
+    {"type": "paragraph", "style": "AnswerLine", "text": "Your answer: $___________ per session"},
+
+    {"type": "heading", "level": 2, "text": "Question 4 — Top 3 Expenses"},
+    {"type": "paragraph", "text": "What are your three biggest monthly expenses?"},
+    {"type": "paragraph", "text": "(Just list them with approximate amounts — e.g., gym rent $1,500, insurance $200, contractor pay $800.)"},
+    {"type": "paragraph", "style": "AnswerLine", "text": "1. ___________ : $___________"},
+    {"type": "paragraph", "style": "AnswerLine", "text": "2. ___________ : $___________"},
+    {"type": "paragraph", "style": "AnswerLine", "text": "3. ___________ : $___________"},
+
+    {"type": "paragraph", "text": "That's it — four questions. Send your answers back whenever you're ready and we'll keep building from there."}
+  ]
+}
