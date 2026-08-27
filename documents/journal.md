@@ -27,3 +27,14 @@ Time-based record of major interactions and initiatives. Each entry captures wha
 - **Structure:**
   - `My Drive > Clients > Enable the Disabled - Shaun Kehoe/` — shared output (read-only)
   - `My Drive > Clients > Enabling the Disabled - Admin/` — our working folder (Effort Log, Journal)
+
+### Effort Log — Text Message History
+- **What:** Parsed text message history with Shaun Kehoe (June 29 – August 27) and created 28 effort log entries.
+- **Outcome:** First version of the effort log is now in place, covering meetings, strategy discussions, client work, admin, and business development.
+- **Key themes surfaced:**
+  - Recurring meetings with Shaun (gym, train yards, Bridgehead, Billings Bridge)
+  - Strategy discussions about the business vision and Shaun's role (employee vs. friend)
+  - Client growth (3 new requests in one week, 10K in contracts landed in 24 hours)
+  - Website issues (forms going to junk mail, missed expo requests)
+  - Business development (L'Arch community housing connection)
+  - Eric's stress and sleep issues during July-August
