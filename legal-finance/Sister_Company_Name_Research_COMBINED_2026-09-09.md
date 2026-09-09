@@ -2,7 +2,7 @@
 
 **Prepared for:** Enable the Disabled / Shaun Kehoe  
 **Date:** September 9, 2026  
-**Research Scope:** Canadian federal and provincial corporate registries, trademark database, and active business operations across 3 batches (30 names total)  
+**Research Scope:** Canadian federal and provincial corporate registries, trademark database, active business operations, and domain availability across 3 batches (30 names total)  
 **Purpose:** Assess viability of proposed names for a for-profit sister corporation to the NFP "Enable the Disabled"
 
 ---
@@ -22,22 +22,22 @@
 
 ## ✅ FINAL COMBINED SUCCESS LIST — Clear for Incorporation
 
-*All 12 names below have no located Canadian corporate registrations, no active trademark conflicts, and no operating businesses with identical names. Ordered by overall strength.*
+*All 12 names below have no located Canadian corporate registrations, no active trademark conflicts, and no operating businesses with identical names. Domain availability checked as of September 9, 2026.*
 
-| Rank | Name | Batch | Format | Key Strengths | Risk Level |
-|------|------|-------|--------|---------------|------------|
-| 1 | **Dynamic Ability** | 01 | Open | Cleanest overall — no corp, no trademark, no operating business anywhere; distinctive, positive, trademarkable | **Low** |
-| 2 | **Adaptive Motion Training** | 03 | Training | Combines 3 strong keywords (adaptive + motion + training); describes methodology; distinctive | **Low** |
-| 3 | **Adaptive Athletic** | 02 | Open | Mission-perfect; directly names the adaptive specialty; clean registry; strong brand potential | **Low** |
-| 4 | **Adaptive Athletic Center** | 03 | Center | Clean registry; "Center" format supports multi-site scaling; strong mission fit | **Low** |
-| 5 | **Access Athletic Training** | 02 | Training | Professional, distinctive, mission-aligned ("access" + "athletic"); clean registry | **Low** |
-| 6 | **Ability Athletic Center** | 03 | Center | Clean registry; center format for multi-site; ability-positive framing; professional tone | **Low** |
-| 7 | **Capability Fitness** | 02 | Open | Positive framing ("capability" vs "disability"); clean registry; trademarkable | **Low** |
-| 8 | **Capability Motion Studio** | 03 | Studio | Clean registry; studio format; capability-forward; unique combination | **Low–Medium** |
-| 9 | **Accessible Motion Studio** | 02 | Studio | Clean registry; studio format; accessibility-forward; "Motion Canada" is different industry | **Low** |
-| 10 | **Ability Motion Training** | 02 | Training | Clean registry; training-focused; ability-positive language; distinctive combination | **Low** |
-| 11 | **Access Fitness Training** | 03 | Training | Clean registry; simple/direct; fitness-focused (vs athletic); accessible language | **Low** |
-| 12 | **Ability Athletics** | 01 | Open | No Canadian corp found; slight risk from US nonprofit "NubAbility Athletics" | **Low–Medium** |
+| Rank | Name | Batch | Format | Key Strengths | .com | .ca | Risk Level |
+|------|------|-------|--------|---------------|------|-----|------------|
+| 1 | **Dynamic Ability** | 01 | Open | Cleanest overall; no corp, no trademark, no operating business; distinctive, positive, trademarkable | ⚠️ Taken (Annulet LLC) | ✅ **Available** | **Low–Medium** |
+| 2 | **Adaptive Motion Training** | 03 | Training | Combines 3 strong keywords (adaptive + motion + training); describes methodology; distinctive | ✅ **Available** | ✅ **Available** | **Low** |
+| 3 | **Adaptive Athletic** | 02 | Open | Mission-perfect; directly names the adaptive specialty; clean registry; strong brand potential | ✅ **Available** | ✅ **Available** | **Low** |
+| 4 | **Adaptive Athletic Center** | 03 | Center | Clean registry; "Center" format supports multi-site scaling; strong mission fit | ✅ **Available** | ✅ **Available** | **Low** |
+| 5 | **Access Athletic Training** | 02 | Training | Professional, distinctive, mission-aligned ("access" + "athletic"); clean registry | ✅ **Available** | ✅ **Available** | **Low** |
+| 6 | **Ability Athletic Center** | 03 | Center | Clean registry; center format for multi-site; ability-positive framing; professional tone | ✅ **Available** | ✅ **Available** | **Low** |
+| 7 | **Capability Fitness** | 02 | Open | Positive framing ("capability" vs "disability"); clean registry; trademarkable | ✅ **Available** | ✅ **Available** | **Low** |
+| 8 | **Capability Motion Studio** | 03 | Studio | Clean registry; studio format; capability-forward; unique combination | ✅ **Available** | ✅ **Available** | **Low–Medium** |
+| 9 | **Accessible Motion Studio** | 02 | Studio | Clean registry; studio format; accessibility-forward; "Motion Canada" is different industry | ✅ **Available** | ✅ **Available** | **Low** |
+| 10 | **Ability Motion Training** | 02 | Training | Clean registry; training-focused; ability-positive language; distinctive combination | ✅ **Available** | ✅ **Available** | **Low** |
+| 11 | **Access Fitness Training** | 03 | Training | Clean registry; simple/direct; fitness-focused (vs athletic); accessible language | ✅ **Available** | ✅ **Available** | **Low** |
+| 12 | **Ability Athletics** | 01 | Open | No Canadian corp found; slight risk from US nonprofit "NubAbility Athletics" | ⚠️ Taken (Tucows Domains Inc.) | ✅ **Available** | **Low–Medium** |
 
 ---
 
@@ -85,14 +85,14 @@
 | # | Name | Status | Notes |
 |---|------|--------|-------|
 | 1 | Empower Fitness | ❌ Conflict | Ottawa gym operating |
-| 2 | Ability Athletics | ✅ **Clear** | US nonprofit only (NubAbility) |
+| 2 | Ability Athletics | ✅ **Clear** | US nonprofit only (NubAbility); .com taken, .ca available |
 | 3 | Access Wellness | ❌ Conflict | NS Health gov't program |
 | 4 | Thrive Fitness | ❌ Conflict | Multiple AB/ON/SK gyms |
 | 5 | Elevate Performance | ❌ Conflict | BC incorporated realty firm |
 | 6 | Inclusive Motion | ❌ Conflict | Canadian mobility retailer |
 | 7 | Adaptive Strength | ❌ Conflict | AB incorporated nutrition corp |
 | 8 | Stride Wellness | ❌ Conflict | BC incorporated counselling corp |
-| 9 | Dynamic Ability | ✅ **Clear** | **Cleanest overall** |
+| 9 | Dynamic Ability | ✅ **Clear** | Cleanest overall; .com taken, .ca available |
 | 10 | Compass Fitness | ❌ Conflict | Kingston ON gym operating |
 
 ### Batch 02 (10 Names)
@@ -100,11 +100,11 @@
 |---|------|--------|-------|
 | 1 | Ability Fitness | ⚠️ Maybe | Generic/descriptive |
 | 2 | Inclusive Athletic Studio | ⚠️ Maybe | Descriptive, vendor/nonprofit use |
-| 3 | Access Athletic Training | ✅ **Clear** | Professional, distinctive |
-| 4 | Capability Fitness | ✅ **Clear** | Positive framing |
-| 5 | Accessible Motion Studio | ✅ **Clear** | Studio format, accessibility-forward |
-| 6 | Ability Motion Training | ✅ **Clear** | Training-focused |
-| 7 | Adaptive Athletic | ✅ **Clear** | Mission-perfect |
+| 3 | Access Athletic Training | ✅ **Clear** | Professional, distinctive; both domains available |
+| 4 | Capability Fitness | ✅ **Clear** | Positive framing; both domains available |
+| 5 | Accessible Motion Studio | ✅ **Clear** | Studio format; both domains available |
+| 6 | Ability Motion Training | ✅ **Clear** | Training-focused; both domains available |
+| 7 | Adaptive Athletic | ✅ **Clear** | Mission-perfect; both domains available |
 | 8 | Inclusive Fitness Training | ❌ Conflict | Generic certification term |
 | 9 | Active Ability Studio | ❌ Conflict | Conflicts with Active Abilities Canada Inc. |
 | 10 | Accessible Strength Training | ❌ Conflict | Generic descriptive |
@@ -113,36 +113,38 @@
 | # | Name | Status | Notes |
 |---|------|--------|-------|
 | 1 | Inclusive Athletic Training | ⚠️ Maybe | Generic descriptor |
-| 2 | Adaptive Motion Training | ✅ **Clear** | Strong keyword combo |
+| 2 | Adaptive Motion Training | ✅ **Clear** | Strong keyword combo; both domains available |
 | 3 | Accessible Athletic Center | ⚠️ Maybe | Generic facility descriptor |
-| 4 | Capability Motion Studio | ✅ **Clear** | Studio format, capability-forward |
-| 5 | Access Fitness Training | ✅ **Clear** | Simple, direct |
+| 4 | Capability Motion Studio | ✅ **Clear** | Studio format; both domains available |
+| 5 | Access Fitness Training | ✅ **Clear** | Simple, direct; both domains available |
 | 6 | Adaptive Strength Studio | ❌ Conflict | Adaptive Strength Association of BC |
 | 7 | Accessible Fitness Center | ❌ Conflict | Generic hotel amenity term |
-| 8 | Ability Athletic Center | ✅ **Clear** | Center format, multi-site ready |
+| 8 | Ability Athletic Center | ✅ **Clear** | Center format, multi-site ready; both domains available |
 | 9 | Inclusive Fitness Training | ❌ Conflict | Generic certification term |
-| 10 | Adaptive Athletic Center | ✅ **Clear** | Center format, scales |
+| 10 | Adaptive Athletic Center | ✅ **Clear** | Center format, scales; both domains available |
 
 ---
 
 ## 🎯 RECOMMENDED SHORTLIST FOR NUANS SEARCH
 
-*Order NUANS reports for these 5 names (covers all formats: Open, Training, Studio, Center)*
+*Order NUANS reports for these 5 names (covers all formats: Open, Training, Studio, Center). All have .ca domains available; most have .com available too.*
 
-| Priority | Name | Format | Rationale |
-|----------|------|--------|-----------|
-| 1 | **Dynamic Ability** | Open | Cleanest record; distinctive; positive; trademarkable |
-| 2 | **Adaptive Motion Training** | Training | Mission-perfect keyword combo; describes methodology |
-| 3 | **Adaptive Athletic Center** | Center | Scales multi-site; names specialty directly |
-| 4 | **Access Athletic Training** | Training | Professional; "access" + "athletic" mission alignment |
-| 5 | **Capability Fitness** | Open | Positive framing; "capability" not "disability"; strong brand |
+| Priority | Name | Format | .com | .ca | Rationale |
+|----------|------|--------|------|-----|-----------|
+| 1 | **Adaptive Motion Training** | Training | ✅ Available | ✅ Available | Mission-perfect keyword combo; describes methodology; both domains available |
+| 2 | **Adaptive Athletic** | Open | ✅ Available | ✅ Available | Mission-perfect; directly names the adaptive specialty; both domains available |
+| 3 | **Adaptive Athletic Center** | Center | ✅ Available | ✅ Available | Scales multi-site; names specialty directly; both domains available |
+| 4 | **Access Athletic Training** | Training | ✅ Available | ✅ Available | Professional; "access" + "athletic" mission alignment; both domains available |
+| 5 | **Capability Fitness** | Open | ✅ Available | ✅ Available | Positive framing; "capability" not "disability"; strong brand; both domains available |
 
 **Alternates (if any above fail NUANS):**
-- Adaptive Athletic (Open format)
-- Ability Athletic Center (Center format)
-- Capability Motion Studio (Studio format)
-- Accessible Motion Studio (Studio format)
-- Access Fitness Training (Training format)
+- Ability Athletic Center (Center format) — both domains available
+- Capability Motion Studio (Studio format) — both domains available
+- Accessible Motion Studio (Studio format) — both domains available
+- Ability Motion Training (Training format) — both domains available
+- Access Fitness Training (Training format) — both domains available
+
+> **Note on .com availability:** Only **Dynamic Ability** (.com taken by Annulet LLC) and **Ability Athletics** (.com taken by Tucows Domains Inc.) have .com domains already registered. All other top candidates have both .com and .ca available.
 
 ---
 
@@ -154,11 +156,13 @@
 
 3. **Reserve the name** — once NUANS clears, reserve federally (90-day hold) or provincially.
 
-4. **Incorporate** — file Articles of Incorporation (CBCA federal or Ontario/Alberta provincial) with reserved name.
+4. **Secure domains** — register both .com and .ca for chosen name immediately (approx. $15–30/year each).
 
-5. **Trademark registration** — post-incorporation, file Canadian trademark application for brand protection.
+5. **Incorporate** — file Articles of Incorporation (CBCA federal or Ontario/Alberta provincial) with reserved name.
 
-6. **Domain/social handles** — secure .ca/.com domains and social media handles for chosen name.
+6. **Trademark registration** — post-incorporation, file Canadian trademark application for brand protection (approx. $350–500 CAD).
+
+7. **Social media handles** — secure matching handles on Facebook, Instagram, LinkedIn, X/Twitter, TikTok.
 
 ---
 
@@ -169,7 +173,7 @@
 | Batch 01 Report | Google Drive: `1YFE8EqQyNJVKKLW6IrBfXNplgH3nLCSp` / Repo: `legal-finance/Sister_Company_Name_Research_2026-09-09.md` |
 | Batch 02 Report | Google Drive: `1ajDh20i9sgsrjvaogJY94urSaRpRmFGc` / Repo: `legal-finance/Sister_Company_Name_Research_Batch02_2026-09-09.md` |
 | Batch 03 Report | Google Drive: `1q06wAaH_-0hAgrPoOJ0kN_inbwiBCoo-` / Repo: `legal-finance/Sister_Company_Name_Research_Batch03_2026-09-09.md` |
-| **This Combined Report** | Google Drive: *uploaded below* / Repo: `legal-finance/Sister_Company_Name_Research_COMBINED_2026-09-09.md` |
+| **Combined Report (with domains)** | Google Drive: *uploaded below* / Repo: `legal-finance/Sister_Company_Name_Research_COMBINED_2026-09-09.md` |
 
 ---
 
@@ -180,16 +184,20 @@
 - CIPO Canadian Trademarks Database
 - Provincial registries: BC Corporate Registry, Ontario Business Registry, Alberta Corporate Registry (via public notices)
 - Canada Corporation Directory (canadacompanyregistry.ca)
+- Domain WHOIS lookup (Python whois library against ICANN/Verisign and CIRA registries)
 - Public web: Google Maps, Yelp, LinkedIn, Facebook, Instagram, company websites, certification providers, nonprofit directories
+
+**Search date:** September 9, 2026
 
 **Limitations:**
 - Public-web searches only; **NUANS report searches official registries** and is required for incorporation
 - Unregistered sole proprietorships/partnerships may not appear
 - Trademark common-law rights may exist without registration
-- Search date: September 9, 2026 — statuses may change
+- WHOIS data has a 24-hour lag; recently registered domains may not appear
+- .ca domains checked via CIRA; .com via ICANN registry
 
-**Recommendation:** Treat this report as preliminary screening. **NUANS is mandatory before filing.**
+**Recommendation:** Treat this report as preliminary screening. **NUANS is mandatory before filing.** Domain availability should be secured immediately upon name selection.
 
 ---
 
-*End of Combined Report — All 30 names assessed, 12 clear, 14 conflicts, 4 descriptive/maybe.*
+*End of Combined Report — 30 names assessed across 3 batches. 12 clear for incorporation (5 with both .com/.ca domains available as top priority). 14 conflicts identified. 4 descriptive/maybe names flagged.*
