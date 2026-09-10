@@ -20,7 +20,15 @@ I want to understand how the $17,000/month breaks down. Not every dollar is the 
 
 **Are government-funded clients paid reliably and on time, or is there often a delay or gap?**
 
-Your answer: _________________________________________________________________
+Your answer: 
+
+
+
+
+
+
+
+
 
 ---
 
@@ -30,7 +38,12 @@ With 30 active clients, I want to know how dependent you are on a few big ones.
 
 **What's your single biggest revenue source — is it one client/funder, a handful, or spread across many?**
 
-Your answer: _________________________________________________________________
+Your answer: 
+
+
+
+
+
 
 **If your top 3 revenue sources disappeared tomorrow, what % of monthly revenue would be gone?**
 
@@ -38,7 +51,9 @@ ___% would disappear
 
 **Have you ever lost a major client or funder? What happened?**
 
-Your answer: _________________________________________________________________
+Your answer: 
+
+
 
 ---
 
@@ -59,7 +74,7 @@ Your sessions: ___/week | Contractors' combined sessions: ___/week
 
 **Are you at capacity, or do you have room to take on more clients without adding people?**
 
-Your answer: _________________________________________________________________
+Your answer: 
 
 ---
 
@@ -69,19 +84,44 @@ I want to understand how someone becomes a client and what happens after.
 
 **When a new client comes in today, what's the very first thing that happens? (e.g., assessment, paperwork, phone call, funding verification)**
 
-Your answer: _________________________________________________________________
+Your answer: 
+
+
+
+
+
+
+
 
 **Do you have a standard intake/assessment process, or is it different every time? Is it written down?**
 
-Your answer: _________________________________________________________________
+Your answer: 
+
+
+
+
+
 
 **How do you track a client's progress, goals, and session history? (paper, spreadsheet, app, memory?)**
 
-Your answer: _________________________________________________________________
+Your answer: 
+
+
+
+
 
 **When a client "graduates" or stops, is there any follow-up or offboarding?**
 
-Your answer: _________________________________________________________________
+Your answer: 
+
+
+
+
+
+
+
+
+
 
 ---
 
