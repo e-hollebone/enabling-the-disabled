@@ -39,7 +39,7 @@ This document contains the key questions required to define the requirements for
   - In-person at Point One Fitness gym: ______ %  
   - In-home visits: ______ %  
   - Virtual/remote sessions: ______ %  
-  - By preference (able-bodied clients choosing convenience): ______ %  
+  - In-home by preference (able-bodied clients choosing convenience): ______ %  
 
 ### 2.2 Accessibility Requirements
 - **Question 4**: For clients requiring accessibility accommodations, what specific needs must be documented and communicated pre-session?  
@@ -110,14 +110,15 @@ This document contains the key questions required to define the requirements for
   - [ ] Clients locked into same time slot each month  
   - [ ] Adjustments made occasionally based on accessibility needs  
   - [ ] Rescheduling common due to transportation/mental health factors
+  - [ ] Other: _______________________________
 
 ### 4.2 Multi-Channel Booking Intake
 - **Question 10**: How do clients currently request/book sessions?  
-  - Text messages  
-  - Email  
-  - Phone calls  
-  - Facebook Messenger  
-  - Other: ________________________  
+  - ___% Text messages  
+  - ___% Email  
+  - ___% Phone calls  
+  - ___% Facebook Messenger  
+  - ___% Other: ________________________  
   - All monitored manually by Shaun — is this still acceptable, or would a unified intake portal be preferred?
 
 ### 4.3 Gym Space Coordination with Dave
@@ -137,17 +138,17 @@ This document contains the key questions required to define the requirements for
   - Current client base: ______  
   - Target client base: ______  
   - Reason for scaling:  
-    - Increase income for existing trainers (like Sean)  
-    - Expand service offerings  
-    - Access new funding streams  
-    - Other: ________________________
+    - [ ] Increase income for existing trainers (like Sean)  
+    - [ ] Expand service offerings  
+    - [ ]A ccess new funding streams  
+    - [ ] Other: ________________________
 
 ### 5.2 Trainer Recruitment Challenges
 - **Question 13**: What qualities are essential for success with your client population, making recruitment difficult?  
-  - Patience/specialized training in disability support  
-  - Ability to adapt to varying cognitive abilities  
-  - Willingness to work flexible hours  
-  - Other: ________________________
+  - [ ] Patience/specialized training in disability support  
+  - [ ] Ability to adapt to varying cognitive abilities  
+  - [ ] Willingness to work flexible hours  
+  - [ ] Other: ________________________
 
 ---
 
@@ -155,10 +156,11 @@ This document contains the key questions required to define the requirements for
 
 ### 6.1 Data Protection Needs
 - **Question 14**: With minors and sensitive health information involved, what level of data protection is needed?  
-  - Basic confidentiality maintained through contracts  
-  - Need formal compliance (e.g., PIPEDA, PHIPA)  
-  - Insurer/funder mandates upcoming  
-  - No formal requirements yet, but want something in place
+  - [ ] Basic confidentiality maintained through contracts  
+  - [ ] Need formal compliance (e.g., PIPEDA, PHIPA)  
+  - [ ] Insurer/funder mandates upcoming  
+  - [ ] No formal requirements yet, but want something in place
+  - [ ] Other: ___________________
 
 ### 6.2 Data Access Controls
 - **Question 15**: Who should have access to which types of client data?  
