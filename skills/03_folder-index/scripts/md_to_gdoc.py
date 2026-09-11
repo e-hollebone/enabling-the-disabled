@@ -1,882 +1,704 @@
 #!/usr/bin/env python3
 """
-md_to_gdoc.py
+Simple markdown-to-Google-Docs converter for the Enable the Disabled project.
 
-Converts Markdown files stored in Google Drive into properly formatted
-Google Docs. All markdown content (headings, bold, tables, lists, checkboxes)
-is converted to native Google Docs formatting via the Docs API batchUpdate.
+For each .md file in Drive:
+  1. Download the markdown content
+  2. Convert to properly formatted Google Docs (headings, bold, tables, bullets, checkboxes, links)
+  3. Create or update the corresponding Google Doc
+  4. Delete the .md file from Drive
 
-After conversion, the original .md files are deleted from Drive and
-README index docs are updated with working internal links.
-
-Usage:
-  python md_to_gdoc.py --convert
-  python md_to_gdoc.py --delete-md
-  python md_to_gdoc.py --update-links
-  python md_to_gdoc.py --all
-
-Requires token at ~/.hermes/profiles/fitness-strategist/google_token.json
+All internal references (folder/file names, IDs in backticks) are replaced
+with clickable Google Drive links.
 """
 
 import os
 import re
 import sys
-import json
-import html
-
+import markdown
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseDownload
+import io
 
-
-# --- Configuration ---
-
+PROFILE_DIR = os.path.expanduser("~/.hermes/profiles/fitness-strategist")
+TOKEN_PATH = os.path.join(PROFILE_DIR, "google_token.json")
 SCOPES = [
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/documents",
 ]
 
-TOKEN_PATH = os.path.expanduser(
-    "~/.hermes/profiles/fitness-strategist/google_token.json"
-)
-
-# --- Master mapping of all Drive files and folders in the Enable the Disabled tree ---
-# This is the canonical ID registry for internal linking.
-# Updated as files are converted from .md to Google Docs.
-
-DRIVE_MAP = {
-    # === ROOT FOLDERS ===
-    "Enable the Disabled - Shaun Kehoe": {
-        "id": "17Sav0cJmDafe8DDvHKKq0OT1awzQ0ik8",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/17Sav0cJmDafe8DDvHKKq0OT1awzQ0ik8",
-    },
-    "Enable the Disabled - Admin": {
-        "id": "1_YpciYU1uRS53ol74oqojUKlUKSQF4BJ",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1_YpciYU1uRS53ol74oqojUKlUKSQF4BJ",
-    },
-
-    # === SHARED ROOT FILES ===
-    "README - Enable the Disabled - Shaun Kehoe": {
-        "id": "1fxnh1MP1sfKwmQhfvLI49DQHLtBXugrhp_AQLPeBBSQ",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1fxnh1MP1sfKwmQhfvLI49DQHLtBXugrhp_AQLPeBBSQ/edit",
-    },
-
-    # === BRAND (Shared) ===
-    "Brand": {
-        "id": "1A45rdYzyLYudsjQEBEm5FcXUDf6198ys",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1A45rdYzyLYudsjQEBEm5FcXUDf6198ys",
-    },
-    "README - Brand": {
-        "id": "13669ge5ZZLWIj4I3O5EYfb0iGnw1LJE9Nb5hoAVlLsM",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/13669ge5ZZLWIj4I3O5EYfb0iGnw1LJE9Nb5hoAVlLsM/edit",
-    },
-
-    # === CORPORATE (Shared) ===
-    "Corporate (Shared)": {
-        "id": "1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-O",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-O",
-    },
-    "README - Corporate (Shared)": {
-        "id": "1WmrJ6JrXszf5hX9iFLi8iiwXG02-Y-C86qkrozuJNyQ",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1WmrJ6JrXszf5hX9iFLi8iiwXG02-Y-C86qkrozuJNyQ/edit",
-    },
-    "00_Fact-finding": {
-        "id": "1reMboKf5TezQWDZ9E55H7v3LyxelA5oH",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1reMboKf5TezQWDZ9E55H7v3LyxelA5oH",
-    },
-    "README - Fact-finding": {
-        "id": "1eLuGBVo_qQt2nngyH7qtpwE74KmeDfM5Qtuvj5aWuVo",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1eLuGBVo_qQt2nngyH7qtpwE74KmeDfM5Qtuvj5aWuVo/edit",
-    },
-    "07_Incorporation": {
-        "id": "1w2On6DibxG5z0REfgLoBYUEkERwkgSAU",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1w2On6DibxG5z0REfgLoBYUEkERwkgSAU",
-    },
-    "README - Incorporation #1": {
-        "id": "1k05txlKg_cv-yi8KOLCOooS7qZSdKQUoSRVM3qV2_Rk",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1k05txlKg_cv-yi8KOLCOooS7qZSdKQUoSRVM3qV2_Rk/edit",
-    },
-    "Incorporation Checklist": {
-        "id": "1blBHVPCVXbg4lmgnOqhY2c1oEQdVapziMOHIZ8BJ2Hc",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1blBHVPCVXbg4lmgnOqhY2c1oEQdVapziMOHIZ8BJ2Hc/edit",
-    },
-    "name search": {
-        "id": "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
-    },
-    "README - name search": {
-        "id": "1rj5CM6WPCyKZ4blOVg5Q4MUcnKhVzoSI5WgUMloaVBI",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1rj5CM6WPCyKZ4blOVg5Q4MUcnKhVzoSI5WgUMloaVBI/edit",
-    },
-    "08_Trademark": {
-        "id": "1omvZoaW1v63lMHFEgrNcxI4e8xtpaTR8",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1omvZoaW1v63lMHFEgrNcxI4e8xtpaTR8",
-    },
-    "README - Trademark": {
-        "id": "10-1A6XRI13979YdI3q-4Zvkw0raOLvZs97XVDFa07Aw",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/10-1A6XRI13979YdI3q-4Zvkw0raOLvZs97XVDFa07Aw/edit",
-    },
-    "Incorporation (2nd)": {
-        "id": "1TxWJJfsh1rm0lFzBTxpyHA56eLp5ncm5",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1TxWJJfsh1rm0lFzBTxpyHA56eLp5ncm5",
-    },
-    "README - Incorporation #2": {
-        "id": "132q5A6VQiJWQovht14qIsSIi0whe3YwdcPAB9hFbntA",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/132q5A6VQiJWQovht14qIsSIi0whe3YwdcPAB9hFbntA/edit",
-    },
-
-    # Existing Google Docs for name research (already converted)
-    "Sister Co Name Research - batch 01 (Doc)": {
-        "id": "1fiyu9wzokeAGVHjAtXPCdXycXqvSyR23Uzp5NWNpyyk",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1fiyu9wzokeAGVHjAtXPCdXycXqvSyR23Uzp5NWNpyyk/edit",
-    },
-    "Sister Co Name Research - batch 02 (Doc)": {
-        "id": "14yTZN9m4f048wy_kfyYPkvykRCPQ41-kk9HPuqIqp3s",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/14yTZN9m4f048wy_kfyYPkvykRCPQ41-kk9HPuqIqp3s/edit",
-    },
-    "Sister Co Name Research - combined (Doc 1)": {
-        "id": "1XaM3bFgXBlHH6rMRe9bawar2LZphBOrXoZPUfVjmXE0",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1XaM3bFgXBlHH6rMRe9bawar2LZphBOrXoZPUfVjmXE0/edit",
-    },
-    "Sister Co Name Research - combined (Doc 2)": {
-        "id": "1zjBCxJfJQxmTFdUCLpRvjgXTw4TU4xJKIRTYa6AXMXc",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1zjBCxJfJQxmTFdUCLpRvjgXTw4TU4xJKIRTYa6AXMXc/edit",
-    },
-
-    # === OPERATIONS (Shared) ===
-    "Operations (Shared)": {
-        "id": "1wgqw4-IReNIMFov73r5DCEpvt7Mm9q1y",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1wgqw4-IReNIMFov73r5DCEpvt7Mm9q1y",
-    },
-    "README - Operations": {
-        "id": "1ek6lhXbO5nmkS-oy90o2gN2qtsaEyULC3_qGHAHvC0Y",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1ek6lhXbO5nmkS-oy90o2gN2qtsaEyULC3_qGHAHvC0Y/edit",
-    },
-    "01_Clients": {
-        "id": "1H0dGCPgf3tT8bYDCp9prGWJT9ub9fgIt",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1H0dGCPgf3tT8bYDCp9prGWJT9ub9fgIt",
-    },
-    "02_HR-Workforce": {
-        "id": "1Y-mz3Dqsd1rBcY6lohx4cTNYefETcqW3",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1Y-mz3Dqsd1rBcY6lohx4cTNYefETcqW3",
-    },
-    "03_Operations": {
-        "id": "1PV6qMwgnj9ATjhWA9p9Tb0S9x4Bg1Hyb",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1PV6qMwgnj9ATjhWA9p9Tb0S9x4Bg1Hyb",
-    },
-    "04_IT-Infrastructure": {
-        "id": "1gNcp_RPinZ2ofaSnf5cE2URko-Q3AR1z",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1gNcp_RPinZ2ofaSnf5cE2URko-Q3AR1z",
-    },
-    "08_Security (Shared)": {
-        "id": "1oTb65y2-xWLmNGa5nZoMYqHqOdiZY_uB",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1oTb65y2-xWLmNGa5nZoMYqHqOdiZY_uB",
-    },
-    "09_Other": {
-        "id": "1WagBxHIuwam9jXlUTN5Ejm0TxSktkFaz",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1WagBxHIuwam9jXlUTN5Ejm0TxSktkFaz",
-    },
-
-    # === _ARCHIVE (Shared) ===
-    "_archive": {
-        "id": "1cezQT8LdBg8Z_YTLdSH1Sgsc2gKdmZHO",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1cezQT8LdBg8Z_YTLdSH1Sgsc2gKdmZHO",
-    },
-    "README - _archive": {
-        "id": "1InsOmBFWYI3_TP3z6CqFel3sYI_c3wDQfgKV0qAaCFg",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1InsOmBFWYI3_TP3z6CqFel3sYI_c3wDQfgKV0qAaCFg/edit",
-    },
-    "originals": {
-        "id": "1sqNlbb-cUM1noX_a__SZAsmcSnytz679",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1sqNlbb-cUM1noX_a__SZAsmcSnytz679",
-    },
-    "word-versions": {
-        "id": "1tT3kL3jv6Fa4sNwcsA7sYmmi8_luQYAh",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1tT3kL3jv6Fa4sNwcsA7sYmmi8_luQYAh",
-    },
-
-    # === ADMIN TREE ===
-    "Corporate (Admin)": {
-        "id": "1tH7rTwRGkjaj8KrZheNAkyLBSEkCdM4x",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/1tH7rTwRGkjaj8KrZheNAkyLBSEkCdM4x",
-    },
-    "README - Corporate (Admin)": {
-        "id": "1xdsYGcqTVJm5NcrS1cLwg2J92WOsa4vVmDQdkPW93Ng",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1xdsYGcqTVJm5NcrS1cLwg2J92WOsa4vVmDQdkPW93Ng/edit",
-    },
-    "08_Security (Admin)": {
-        "id": "14Ek0zgqHHpXuuBtoe7EJDRUwjpTRu_Iy",
-        "type": "folder",
-        "url": "https://drive.google.com/drive/folders/14Ek0zgqHHpXuuBtoe7EJDRUwjpTRu_Iy",
-    },
-    "README - 08_Security (Admin)": {
-        "id": "1shUm9OVOh5x0gGieaM7FYLExOWRZ2Fw-SiogUfpX4gQ",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1shUm9OVOh5x0gGieaM7FYLExOWRZ2Fw-SiogUfpX4gQ/edit",
-    },
-    "Enable the Disabled - Account & Asset Inventory": {
-        "id": "1H5VapzupQpUiXrviu1cmrukEnNWCFJu84VptwMRqolQ",
-        "type": "sheet",
-        "url": "https://docs.google.com/spreadsheets/d/1H5VapzupQpUiXrviu1cmrukEnNWCFJu84VptwMRqolQ/edit",
-    },
-    "README - Enabling the Disabled - Admin": {
-        "id": "1lYtQHGtDmXI7YNPs6kSSM-FBBRdEiMwPdkZUX7aRceE",
-        "type": "doc",
-        "url": "https://docs.google.com/document/d/1lYtQHGtDmXI7YNPs6kSSM-FBBRdEiMwPdkZUX7aRceE/edit",
-    },
+# Master ID registry for link replacement
+REGISTRY = {
+    # Folders
+    "Enable the Disabled - Shaun Kehoe": "17Sav0cJmDafe8DDvHKKq0OT1awzQ0ik8",
+    "Enable the Disabled - Admin": "1_YpciYU1uRS53ol74oqojUKlUKSQF4BJ",
+    "Brand": "1A45rdYzyLYudsjQEBEm5FcXUDf6198ys",
+    "Corporate": "1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-O",
+    "Corporate (Admin)": "1tH7rTwRGkjaj8KrZheNAkyLBSEkCdM4x",
+    "Operations": "1wgqw4-IReNIMFov73r5DCEpvt7Mm9q1y",
+    "00_Fact-finding": "1reMboKf5TezQWDZ9E55H7v3LyxelA5oH",
+    "07_Incorporation": "1w2On6DibxG5z0REfgLoBYUEkERwkgSAU",
+    "08_Trademark": "1omvZoaW1v63lMHFEgrNcxI4e8xtpaTR8",
+    "name search": "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
+    "01_Clients": "1H0dGCPgf3tT8bYDCp9prGWJT9ub9fgIt",
+    "02_HR-Workforce": "1Y-mz3Dqsd1rBcY6lohx4cTNYefETcqW3",
+    "03_Operations": "1PV6qMwgnj9ATjhWA9p9Tb0S9x4Bg1Hyb",
+    "04_IT-Infrastructure": "1gNcp_RPinZ2ofaSnf5cE2URko-Q3AR1z",
+    "08_Security (Shared)": "1oTb65y2-xWLmNGa5nZoMYqHqOdiZY_uB",
+    "08_Security (Admin)": "14Ek0zgqHHpXuuBtoe7EJDRUwjpTRu_Iy",
+    "09_Other": "1WagBxHIuwam9jXlUTN5Ejm0TxSktkFaz",
+    "_archive": "1cezQT8LdBg8Z_YTLdSH1Sgsc2gKdmZHO",
+    "originals": "1sqNlbb-cUM1noX_a__SZAsmcSnytz679",
+    "word-versions": "1tT3kL3jv6Fa4sNwcsA7sYmmi8_luQYAh",
+    "Incorporation (2nd)": "1TxWJJfsh1rm0lFzBTxpyHA56eLp5ncm5",
+    # Google Docs
+    "README - Enable the Disabled - Shaun Kehoe": "1fxnh1MP1sfKwmQhfvLI49DQHLtBXugrhp_AQLPeBBSQ",
+    "README - Brand": "13669ge5ZZLWIj4I3O5EYfb0iGnw1LJE9Nb5hoAVlLsM",
+    "README - Corporate (Shared)": "1WmrJ6JrXszf5hX9iFLi8iiwXG02-Y-C86qkrozuJNyQ",
+    "README - Corporate (Admin)": "1xdsYGcqTVJm5NcrS1cLwg2J92WOsa4vVmDQdkPW93Ng",
+    "README - Operations": "1ek6lhXbO5nmkS-oy90o2gN2qtsaEyULC3_qGHAHvC0Y",
+    "README - _archive": "1InsOmBFWYI3_TP3z6CqFel3sYI_c3wDQfgKV0qAaCFg",
+    "README - Incorporation #1": "1k05txlKg_cv-yi8KOLCOooS7qZSdKQUoSRVM3qV2_Rk",
+    "README - name search": "1rj5CM6WPCyKZ4blOVg5Q4MUcnKhVzoSI5WgUMloaVBI",
+    "README - Trademark": "10-1A6XRI13979YdI3q-4Zvkw0raOLvZs97XVDFa07Aw",
+    "README - Incorporation #2": "132q5A6VQiJWQovht14qIsSIi0whe3YwdcPAB9hFbntA",
+    "README - Fact-finding": "1eLuGBVo_qQt2nngyH7qtpwE74KmeDfM5Qtuvj5aWuVo",
+    "README - 08_Security (Admin)": "1shUm9OVOh5x0gGieaM7FYLExOWRZ2Fw-SiogUfpX4gQ",
+    "README - Enabling the Disabled - Admin": "1lYtQHGtDmXI7YNPs6kSSM-FBBRdEiMwPdkZUX7aRceE",
+    "Incorporation Checklist": "1blBHVPCVXbg4lmgnOqhY2c1oEQdVapziMOHIZ8BJ2Hc",
+    "Sister Co Name Research - batch 01 (Doc)": "1fiyu9wzokeAGVHjAtXPCdXycXqvSyR23Uzp5NWNpyyk",
+    "Sister Co Name Research - batch 02 (Doc)": "14yTZN9m4f048wy_kfyYPkvykRCPQ41-kk9HPuqIqp3s",
+    "Sister Co Name Research - combined (Doc 1)": "1XaM3bFgXBlHH6rMRe9bawar2LZphBOrXoZPUfVjmXE0",
+    "Sister Co Name Research - combined (Doc 2)": "1zjBCxJfJQxmTFdUCLpRvjgXTw4TU4xJKIRTYa6AXMXc",
 }
 
-# --- Markdown files to convert (from Drive to Google Docs) ---
-# Each entry: (md_file_id, md_filename, parent_folder_id, target_doc_id, target_doc_name)
 
-MD_FILES = [
-    # 1. Sister Co Name Research - batch 01 (.md) → update existing Doc
-    {
-        "md_id": "1YFE8EqQyNJVKKLW6IrBfXNplgH3nLCSp",
-        "md_name": "Sister Company Name Research - Enable the Disabled - 2026-09-09",
-        "parent_id": "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",  # name search folder
-        "target_doc_id": "1fiyu9wzokeAGVHjAtXPCdXycXqvSyR23Uzp5NWNpyyk",  # existing Google Doc
-        "target_doc_name": "Sister Company Name Research - Enable the Disabled - 2026-09-09",
-    },
-    # 2. Sister Co Name Research - batch 02 (.md) → update existing Doc (Batch-02.md is a different file)
-    {
-        "md_id": "1ajDh20i9sgsrjvaogJY94urSaRpRmFGc",
-        "md_name": "Sister Company Name Research - Enable the Disabled - 2026-09-09 - Batch 02",
-        "parent_id": "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
-        "target_doc_id": "14yTZN9m4f048wy_kfyYPkvykRCPQ41-kk9HPuqIqp3s",  # existing Google Doc
-        "target_doc_name": "Sister Company Name Research - Enable the Disabled - 2026-09-09 - Batch 02",
-    },
-    # 3. Sister Co Name Research - batch 03 (.md) → NO existing Doc, need to create
-    # The batch 03 .md exists but there's no Google Doc for it in the name search folder
-    {
-        "md_id": "1q06wAaH_-0hAgrPoOJ0kN_inbwiBCoo-",
-        "md_name": "Sister Company Name Research - Enable the Disabled - 2026-09-09 - Batch 03",
-        "parent_id": "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
-        "target_doc_id": None,  # Need to create new
-        "target_doc_name": "Sister Company Name Research - Enable the Disabled - 2026-09-09 - Batch 03",
-    },
-    # 4. Sister Co Name Research - combined (.md) in name search → update existing Doc
-    {
-        "md_id": "1_PptdlLnVPNSSQePGayS0W4-C2Czimy_",
-        "md_name": "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09",
-        "parent_id": "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
-        "target_doc_id": "1zjBCxJfJQxmTFdUCLpRvjgXTw4TU4xJKIRTYa6AXMXc",  # existing combined Doc
-        "target_doc_name": "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09",
-    },
-    # 5. Sister Co Name Research - combined (.md) in 07_Incorporation → update existing Doc
-    {
-        "md_id": "1zSUPQVjD42ES8LPbNmynR7C79zWBLnwl",
-        "md_name": "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09",
-        "parent_id": "1w2On6DibxG5z0REfgLoBYUEkERwkgSAU",  # 07_Incorporation folder
-        "target_doc_id": "1XaM3bFgXBlHH6rMRe9bawar2LZphBOrXoZPUfVjmXE0",  # existing combined Doc
-        "target_doc_name": "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09",
-    },
-]
+def drive_url(item_id, item_type):
+    """Build a Drive URL from an ID and type."""
+    if item_type == "folder":
+        return f"https://drive.google.com/drive/folders/{item_id}"
+    elif item_type == "doc":
+        return f"https://docs.google.com/document/d/{item_id}/edit"
+    elif item_type == "sheet":
+        return f"https://docs.google.com/spreadsheets/d/{item_id}/edit"
+    elif item_type == "pdf":
+        return f"https://drive.google.com/file/d/{item_id}/view"
+    else:
+        return f"https://drive.google.com/file/d/{item_id}/view"
 
 
-def get_credentials():
-    """Load Google OAuth2 credentials from the fitness-strategist profile."""
+def replace_links(text):
+    """Replace `Name` and `ID` backtick patterns with markdown links."""
+    for name, item_id in REGISTRY.items():
+        # Determine type
+        is_doc = item_id.startswith("1") and 40 <= len(item_id) <= 50 and not item_id.startswith("1Y") and not item_id.startswith("1P") and not item_id.startswith("1tT") and not item_id.startswith("1s") and not item_id.startswith("1q0") and not item_id.startswith("1aj") and not item_id.startswith("1zS") and not item_id.startswith("1_T") and not item_id.startswith("1n") and not item_id.startswith("1Q") and not item_id.startswith("1m2") and not item_id.startswith("1s") and not item_id.startswith("1W") and not item_id.startswith("1m") and not item_id.startswith("1i")
+        
+        # Just use doc type for known doc IDs, folder for folder IDs
+        item_type = "folder"
+        if name.startswith("README") or name in ["Incorporation Checklist", "Sister Co Name Research - batch 01 (Doc)", "Sister Co Name Research - batch 02 (Doc)", "Sister Co Name Research - combined (Doc 1)", "Sister Co Name Research - combined (Doc 2)"]:
+            item_type = "doc"
+        elif name.endswith(".png") or name.endswith(".pdf"):
+            item_type = "pdf"
+        elif "Inventory" in name:
+            item_type = "sheet"
+        
+        url = drive_url(item_id, item_type)
+        
+        # Replace `Name` with [Name](URL)
+        escaped = re.escape(name)
+        text = re.sub(
+            rf'`({escaped})`',
+            rf'[{name}]({url})',
+            text
+        )
+        
+        # Replace `ID` with [ID](URL)
+        escaped_id = re.escape(item_id)
+        text = re.sub(
+            rf'`({escaped_id})`',
+            rf'[{item_id}]({url})',
+            text
+        )
+    
+    return text
+
+
+def get_creds():
     creds = None
     if os.path.exists(TOKEN_PATH):
         creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
-            with open(TOKEN_PATH, "w") as token:
-                token.write(creds.to_json())
+            with open(TOKEN_PATH, "w") as f:
+                f.write(creds.to_json())
         else:
-            print("ERROR: No valid credentials found. Run setup.py first.")
+            print("ERROR: No valid credentials. Run setup.py first.")
             sys.exit(1)
     return creds
 
 
-def get_services():
-    """Get authenticated Drive and Docs API services."""
-    creds = get_credentials()
-    drive = build("drive", "v3", credentials=creds)
-    docs = build("docs", "v1", credentials=creds)
-    return drive, docs
-
-
-def download_md_content(drive, file_id):
-    """Download the content of a text/markdown file from Drive."""
-    req = drive.files().get_media(fileId=file_id)
-    content = req.execute()
-    if isinstance(content, bytes):
-        content = content.decode("utf-8")
+def download_md(drive, file_id):
+    request = drive.files().get_media(fileId=file_id)
+    fh = io.BytesIO()
+    downloader = MediaIoBaseDownload(fh, request)
+    done = False
+    while not done:
+        status, done = downloader.next_chunk()
+    content = fh.getvalue().decode("utf-8")
     return content
 
 
-def utf16_count(text):
-    """Count UTF-16 code units (what Google Docs API uses for indexing)."""
+def md_to_html(md_text):
+    """Convert markdown to HTML using the markdown library."""
+    # Replace internal links first
+    md_text = replace_links(md_text)
+    
+    # Configure markdown extensions
+    md = markdown.Markdown(extensions=[
+        "tables",
+        "fenced_code",
+        "toc",
+        "nl2br",
+        "sane_lists",
+    ])
+    
+    html = md.convert(md_text)
+    return html
+
+
+def count_utf16(text):
     return len(text.encode("utf-16-le")) // 2
 
 
-def insert_text_at(index, text):
-    """Create an insertText request for the given index and text."""
+def create_formatted_doc(docs, title, parent_id, html_content):
+    """Create a Google Doc with content formatted from HTML.
+    
+    Uses a simple approach: insert text with appropriate styles.
+    For full fidelity, we'd parse the HTML, but for this project
+    the markdown structure is well-defined.
+    """
+    # Create the document
+    body = {"title": title}
+    if parent_id:
+        body["parents"] = [parent_id]
+    doc = docs.documents().create(body=body).execute()
+    doc_id = doc["documentId"]
+    
+    # For now, use a simple text insertion approach
+    # Parse the HTML and generate Docs API requests
+    requests = html_to_docs_requests(html_content)
+    
+    if requests:
+        docs.documents().batchUpdate(
+            documentId=doc_id, body={"requests": requests}
+        ).execute()
+    
+    return doc_id
+
+
+def html_to_docs_requests(html):
+    """Convert HTML to Google Docs API batchUpdate requests."""
+    # Parse HTML using regex (simple approach for well-structured markdown output)
+    requests = []
+    cursor = 2  # Docs index starts at 2
+    
+    # Strip HTML tags and convert to styled text
+    # This is a simplified parser - handles the common markdown-to-HTML patterns
+    
+    pos = 0
+    while pos < len(html):
+        # Find next HTML tag
+        tag_start = html.find("<", pos)
+        if tag_start == -1:
+            # Remaining text
+            text = html[pos:]
+            if text.strip():
+                text = unescape_html(text)
+                requests.extend(insert_styled_text(cursor, text))
+                cursor += count_utf16(text)
+            break
+        
+        # Process text before tag
+        text_before = html[pos:tag_start]
+        if text_before.strip():
+            text = unescape_html(text_before)
+            requests.extend(insert_styled_text(cursor, text))
+            cursor += count_utf16(text)
+        
+        # Find the tag
+        tag_end = html.find(">", tag_start)
+        if tag_end == -1:
+            break
+        
+        tag_content = html[tag_start + 1:tag_end]
+        pos = tag_end + 1
+        
+        # Parse tag
+        if tag_content.startswith("/"):
+            # Closing tag
+            continue
+        elif tag_content.startswith("br"):
+            requests.append(insert_newline(cursor))
+            cursor += 1
+        elif tag_content.startswith("h1"):
+            # Read until </h1>
+            content_start = pos
+            close_tag = html.find("</h1>", pos)
+            if close_tag == -1:
+                break
+            content = html[content_start:close_tag].strip()
+            content = strip_tags(content)
+            content = unescape_html(content)
+            text_utf16 = count_utf16(content)
+            
+            requests.append(insert_text(cursor, content))
+            requests.append(insert_newline(cursor + text_utf16))
+            end = cursor + text_utf16 + 1
+            requests.append(set_named_style(cursor, end, "HEADING1"))
+            cursor = end
+            pos = close_tag + 5
+        elif tag_content.startswith("h2"):
+            content_start = pos
+            close_tag = html.find("</h2>", pos)
+            if close_tag == -1:
+                break
+            content = html[content_start:close_tag].strip()
+            content = strip_tags(content)
+            content = unescape_html(content)
+            if content:
+                text_utf16 = count_utf16(content)
+                requests.append(insert_text(cursor, content))
+                requests.append(insert_newline(cursor + text_utf16))
+                end = cursor + text_utf16 + 1
+                requests.append(set_named_style(cursor, end, "HEADING2"))
+                cursor = end
+            pos = close_tag + 5
+        elif tag_content.startswith("h3"):
+            content_start = pos
+            close_tag = html.find("</h3>", pos)
+            if close_tag == -1:
+                break
+            content = html[content_start:close_tag].strip()
+            content = strip_tags(content)
+            content = unescape_html(content)
+            if content:
+                text_utf16 = count_utf16(content)
+                requests.append(insert_text(cursor, content))
+                requests.append(insert_newline(cursor + text_utf16))
+                end = cursor + text_utf16 + 1
+                requests.append(set_named_style(cursor, end, "HEADING3"))
+                cursor = end
+            pos = close_tag + 5
+        elif tag_content.startswith("p"):
+            content_start = pos
+            close_tag = html.find("</p>", pos)
+            if close_tag == -1:
+                break
+            content = html[content_start:close_tag].strip()
+            content = unescape_html(content)
+            
+            # Process inline formatting
+            styled_parts = parse_inline_html(content)
+            text_offset = cursor
+            
+            for part in styled_parts:
+                part_text = part["text"]
+                part_utf16 = count_utf16(part_text)
+                
+                if part_text:
+                    requests.append(insert_text(cursor, part_text))
+                    if part.get("bold"):
+                        requests.append(set_text_style(cursor, cursor + part_utf16, {"bold": True}))
+                    if part.get("italic"):
+                        requests.append(set_text_style(cursor, cursor + part_utf16, {"italic": True}))
+                    if part.get("code"):
+                        requests.append(set_text_style(cursor, cursor + part_utf16, 
+                            {"fontFamily": "Courier New", "fontSize": {"magnitude": 10, "unit": "PT"}}))
+                    if part.get("link"):
+                        requests.append(set_text_style(cursor, cursor + part_utf16, 
+                            {"link": {"url": part["link"]}}))
+                    cursor += part_utf16
+            
+            requests.append(insert_newline(cursor))
+            cursor += 1
+            pos = close_tag + 4
+        elif tag_content.startswith("ul"):
+            # Collect list items
+            items = []
+            list_end = html.find("</ul>", pos)
+            if list_end == -1:
+                break
+            list_content = html[pos:list_end]
+            
+            # Extract <li> items
+            li_pattern = r"<li>(.*?)</li>"
+            for m in re.finditer(li_pattern, list_content, re.DOTALL):
+                item_html = m.group(1).strip()
+                item_text = strip_tags(item_html)
+                item_text = unescape_html(item_text)
+                if item_text:
+                    styled_parts = parse_inline_html(item_text)
+                    start = cursor
+                    for part in styled_parts:
+                        part_text = part["text"]
+                        part_utf16 = count_utf16(part_text)
+                        if part_text:
+                            requests.append(insert_text(cursor, part_text))
+                            if part.get("bold"):
+                                requests.append(set_text_style(cursor, cursor + part_utf16, {"bold": True}))
+                            if part.get("italic"):
+                                requests.append(set_text_style(cursor, cursor + part_utf16, {"italic": True}))
+                            if part.get("link"):
+                                requests.append(set_text_style(cursor, cursor + part_utf16, {"link": {"url": part["link"]}}))
+                            cursor += part_utf16
+                    requests.append(insert_newline(cursor))
+                    cursor += 1
+                    
+                    # Apply bullet to the paragraph
+                    requests.append(create_bullets(start, cursor, "BULLET_DISC"))
+            
+            pos = list_end + 5
+        elif tag_content.startswith("ol"):
+            list_end = html.find("</ol>", pos)
+            if list_end == -1:
+                break
+            list_content = html[pos:list_end]
+            
+            li_pattern = r"<li>(.*?)</li>"
+            for m in re.finditer(li_pattern, list_content, re.DOTALL):
+                item_html = m.group(1).strip()
+                item_text = strip_tags(item_html)
+                item_text = unescape_html(item_text)
+                if item_text:
+                    styled_parts = parse_inline_html(item_text)
+                    start = cursor
+                    for part in styled_parts:
+                        part_text = part["text"]
+                        part_utf16 = count_utf16(part_text)
+                        if part_text:
+                            requests.append(insert_text(cursor, part_text))
+                            if part.get("link"):
+                                requests.append(set_text_style(cursor, cursor + part_utf16, {"link": {"url": part["link"]}}))
+                            cursor += part_utf16
+                    requests.append(insert_newline(cursor))
+                    cursor += 1
+                    requests.append(create_bullets(start, cursor, "NUMBER"))
+            
+            pos = list_end + 5
+        elif tag_content.startswith("code"):
+            # Code block
+            close_tag = html.find("</code>", pos)
+            if close_tag == -1:
+                break
+            code_content = html[pos:close_tag]
+            code_content = unescape_html(code_content)
+            code_utf16 = count_utf16(code_content)
+            requests.append(insert_text(cursor, code_content))
+            requests.append(insert_newline(cursor + code_utf16))
+            end = cursor + code_utf16 + 1
+            requests.append(set_text_style(cursor, end, 
+                {"fontFamily": "Courier New", "fontSize": {"magnitude": 10, "unit": "PT"}}))
+            cursor = end
+            pos = close_tag + 7
+        elif tag_content.startswith("pre"):
+            close_tag = html.find("</pre>", pos)
+            if close_tag == -1:
+                break
+            code_content = html[pos:close_tag]
+            # Strip inner <code> tags if present
+            code_content = strip_tags(code_content)
+            code_content = unescape_html(code_content)
+            code_utf16 = count_utf16(code_content)
+            requests.append(insert_text(cursor, code_content))
+            requests.append(insert_newline(cursor + code_utf16))
+            end = cursor + code_utf16 + 1
+            requests.append(set_text_style(cursor, end, 
+                {"fontFamily": "Courier New", "fontSize": {"magnitude": 10, "unit": "PT"}}))
+            cursor = end
+            pos = close_tag + 6
+        elif tag_content.startswith("blockquote"):
+            close_tag = html.find("</blockquote>", pos)
+            if close_tag == -1:
+                break
+            quote_content = html[pos:close_tag]
+            # Extract paragraph text
+            para_match = re.search(r"<p>(.*?)</p>", quote_content, re.DOTALL)
+            if para_match:
+                quote_text = strip_tags(para_match.group(1))
+                quote_text = unescape_html(quote_text)
+            else:
+                quote_text = strip_tags(quote_content)
+                quote_text = unescape_html(quote_text)
+            
+            if quote_text:
+                quote_utf16 = count_utf16(quote_text)
+                requests.append(insert_text(cursor, quote_text))
+                requests.append(insert_newline(cursor + quote_utf16))
+                end = cursor + quote_utf16 + 1
+                requests.append(set_text_style(cursor, end, {"italic": True}))
+                requests.append(set_paragraph_style(cursor, end, {
+                    "marginStart": {"magnitude": 20, "unit": "PT"}
+                }))
+                cursor = end
+            pos = close_tag + 13
+        elif tag_content.startswith("table"):
+            # Parse table
+            table_end = html.find("</table>", pos)
+            if table_end == -1:
+                break
+            table_html = html[pos:table_end]
+            
+            # Extract rows
+            rows = []
+            tr_pattern = r"<tr>(.*?)</tr>"
+            for tr_match in re.finditer(tr_pattern, table_html, re.DOTALL):
+                row_html = tr_match.group(1)
+                cells = []
+                td_pattern = r"<t[dh]>(.*?)</t[dh]>"
+                for td_match in re.finditer(td_pattern, row_html, re.DOTALL):
+                    cell_text = strip_tags(td_match.group(1))
+                    cell_text = unescape_html(cell_text)
+                    cells.append(cell_text)
+                rows.append(cells)
+            
+            if rows:
+                num_cols = max(len(r) for r in rows)
+                num_rows = len(rows)
+                
+                # Pad rows
+                for row in rows:
+                    while len(row) < num_cols:
+                        row.append("")
+                
+                # Insert table
+                requests.append({
+                    "insertTable": {
+                        "rows": num_rows,
+                        "columns": num_cols,
+                        "location": {"segmentId": "", "index": cursor},
+                    }
+                })
+                
+                # Fill cells
+                for ri, row in enumerate(rows):
+                    for ci, cell_text in enumerate(row):
+                        cell_idx = cursor + 1 + ri * num_cols + ci + 1
+                        if cell_text:
+                            cell_utf16 = count_utf16(cell_text)
+                            requests.append(insert_text(cell_idx, cell_text))
+                            
+                            # Bold first row (headers)
+                            if ri == 0:
+                                requests.append(set_text_style(cell_idx, cell_idx + cell_utf16, {"bold": True}))
+                
+                cursor = cursor + 1 + num_rows * num_cols + 1
+            
+            pos = table_end + 8
+        elif tag_content.startswith("hr"):
+            # Horizontal rule - insert a line break with border
+            requests.append(insert_text(cursor, ""))
+            requests.append(insert_newline(cursor))
+            requests.append(set_paragraph_style(cursor, cursor + 1, {
+                "borderStyle": {
+                    "width": {"magnitude": 1, "unit": "PT"},
+                    "dashStyle": "SOLID_MED",
+                }
+            }))
+            cursor += 1
+            pos = tag_end + 1
+        elif tag_content.startswith("a "):
+            # This is handled by parse_inline_html
+            continue
+        else:
+            # Skip unknown tags
+            continue
+    
+    return requests
+
+
+def parse_inline_html(text):
+    """Parse inline HTML (bold, italic, code, links) and return styled parts."""
+    parts = []
+    pos = 0
+    
+    # Pattern for inline elements
+    inline_pattern = r'(<strong>|</strong>|<em>|</em>|<code>|</code>|<a\s+[^>]*>|</a>)'
+    
+    while pos < len(text):
+        match = re.search(inline_pattern, text[pos:])
+        if not match:
+            # Remaining plain text
+            remaining = text[pos:]
+            if remaining:
+                parts.append({"text": unescape_html(remaining)})
+            break
+        
+        # Text before the match
+        before = text[pos:pos + match.start()]
+        if before:
+            parts.append({"text": unescape_html(before)})
+        
+        tag = match.group(1)
+        pos += match.end()
+        
+        if tag == "<strong>":
+            # Find closing tag
+            close = text.find("</strong>", pos)
+            if close == -1:
+                break
+            inner = text[pos:close]
+            inner = unescape_html(inner)
+            parts.append({"text": inner, "bold": True})
+            pos = close + len("</strong>")
+        elif tag == "<em>":
+            close = text.find("</em>", pos)
+            if close == -1:
+                break
+            inner = text[pos:close]
+            inner = unescape_html(inner)
+            parts.append({"text": inner, "italic": True})
+            pos = close + len("</em>")
+        elif tag == "<code>":
+            close = text.find("</code>", pos)
+            if close == -1:
+                break
+            inner = text[pos:close]
+            inner = unescape_html(inner)
+            parts.append({"text": inner, "code": True})
+            pos = close + len("</code>")
+        elif tag.startswith("<a "):
+            # Extract href
+            href_match = re.search(r'href="([^"]*)"', tag)
+            href = href_match.group(1) if href_match else ""
+            
+            close = text.find("</a>", pos)
+            if close == -1:
+                break
+            inner = text[pos:close]
+            inner = unescape_html(inner)
+            parts.append({"text": inner, "link": href})
+            pos = close + len("</a>")
+    
+    # Merge consecutive plain text parts
+    merged = []
+    for part in parts:
+        if merged and not any(part.get(k) for k in ["bold", "italic", "code", "link"]):
+            if not any(merged[-1].get(k) for k in ["bold", "italic", "code", "link"]):
+                merged[-1]["text"] += part["text"]
+            else:
+                merged.append(part)
+        else:
+            merged.append(part)
+    
+    return merged
+
+
+def strip_tags(text):
+    """Remove HTML tags from text."""
+    return re.sub(r'<[^>]+>', '', text)
+
+
+def unescape_html(text):
+    """Convert HTML entities to characters."""
+    text = text.replace("&lt;", "<")
+    text = text.replace("&gt;", ">")
+    text = text.replace("&amp;", "&")
+    text = text.replace("&quot;", '"')
+    text = text.replace("&#39;", "'")
+    text = text.replace("&nbsp;", " ")
+    text = text.replace("&#x27;", "'")
+    text = text.replace("&#x2F;", "/")
+    # Handle emoji entities
+    text = re.sub(r'&#x([0-9A-Fa-f]+);', lambda m: chr(int(m.group(1), 16)), text)
+    text = re.sub(r'&#(\d+);', lambda m: chr(int(m.group(1))), text)
+    return text
+
+
+def insert_text(cursor, text):
     return {
         "insertText": {
-            "location": {"segmentId": "", "index": index},
+            "location": {"segmentId": "", "index": cursor},
             "text": text,
         }
     }
 
 
-def update_text_style(start, end, text_style, fields):
-    """Create an updateTextStyle request."""
+def insert_newline(cursor):
+    return {
+        "insertText": {
+            "location": {"segmentId": "", "index": cursor},
+            "text": "\n",
+        }
+    }
+
+
+def set_text_style(start, end, style):
+    fields = ",".join(style.keys())
     return {
         "updateTextStyle": {
             "range": {"startIndex": start, "endIndex": end},
             "fields": fields,
-            "textStyle": text_style,
+            "textStyle": style,
         }
     }
 
 
-def update_paragraph_style(start, end, para_style, fields):
-    """Create an updateParagraphStyle request."""
+def set_named_style(start, end, style_type):
     return {
         "updateParagraphStyle": {
             "range": {"startIndex": start, "endIndex": end},
-            "fields": fields,
-            "paragraphStyle": para_style,
+            "fields": "namedStyleType",
+            "paragraphStyle": {"namedStyleType": style_type},
         }
     }
 
 
-def set_paragraph_heading_style(start, end, style_type):
-    """Apply a heading paragraph style."""
-    style_map = {
-        "HEADING1": "HEADING1",
-        "HEADING2": "HEADING2",
-        "HEADING3": "HEADING3",
-        "NORMAL": "NORMAL_TEXT",
-    }
+def set_paragraph_style(start, end, style):
     return {
         "updateParagraphStyle": {
             "range": {"startIndex": start, "endIndex": end},
-            "fields": "paragraphStyle",
-            "paragraphStyle": {
-                "namedStyleType": style_map.get(style_type, "NORMAL_TEXT"),
-            },
+            "fields": ",".join(style.keys()),
+            "paragraphStyle": style,
         }
     }
 
 
-def set_paragraph_bullet(start, end, bullet_type="BULLET_DISC"):
-    """Apply bullet list style to a paragraph."""
+def create_bullets(start, end, preset):
     return {
         "createParagraphBullets": {
             "range": {"startIndex": start, "endIndex": end},
-            "bulletPreset": bullet_type,
+            "bulletPreset": preset,
         }
     }
 
 
-def parse_link_in_text(text):
-    """
-    Parse markdown links in text and return a list of (display_text, link_url) tuples
-    and the plain text with link markers removed.
-    Used for inserting hyperlinks in Google Docs.
-    """
-    # Find markdown links: [text](url)
-    links = []
-    plain_text = text
-    
-    # We need to handle this carefully for the Docs API
-    # The approach: insert plain text first, then apply link styles
-    pattern = r'\[([^\]]+)\]\(([^)]+)\)'
-    matches = list(re.finditer(pattern, text))
-    
-    if not matches:
-        return plain_text, []
-    
-    # Build plain text (just the display text, removing markdown link syntax)
-    plain_text = re.sub(pattern, r'\1', text)
-    
-    # Build link ranges in plain text
-    # We need to find where each link's display text appears in plain_text
-    links = []
-    offset = 0
-    for match in matches:
-        display = match.group(1)
-        url = match.group(2)
-        # Find the display text in plain_text starting from offset
-        pos = plain_text.find(display, offset)
-        if pos >= 0:
-            links.append({
-                "start": pos + 1,  # +1 for Docs 1-based indexing
-                "end": pos + len(display) + 1,
-                "url": url,
-            })
-            offset = pos + len(display)
-    
-    return plain_text, links
-
-
-def convert_md_to_docs_requests(md_text, base_url=None):
-    """
-    Convert markdown text into Google Docs API batchUpdate requests.
-    
-    Produces properly formatted Google Docs with:
-    - Headings (Heading 1, 2, 3 styles)
-    - Bold/italic/inline code formatting
-    - Tables with headers
-    - Bullet lists
-    - Checkboxes (☐ / ☑)
-    - Horizontal rules (paragraph border)
-    - Internal links (auto-replaced with Drive URLs)
-    - Code blocks (monospace)
-    
-    Returns a list of batchUpdate request dicts.
-    """
-    requests = []
-    # Google Docs uses 1-based indexing. Index 1 is reserved.
-    # Content starts at index 2. Each insertion shifts indices.
-    cursor = 2  # Next insertion point
-    
-    lines = md_text.split("\n")
-    i = 0
-    
-    while i < len(lines):
-        line = lines[i]
-        stripped = line.strip()
-        
-        # Skip empty lines
-        if not stripped:
-            i += 1
-            continue
-        
-        # Heading 1
-        if stripped.startswith("# "):
-            text = stripped[2:].strip()
-            # Apply link replacements in text
-            text, links = parse_link_in_text(text)
-            text_utf16 = utf16_count(text)
-            
-            requests.append(insert_text_at(cursor, text))
-            # Add newline
-            requests.append(insert_text_at(cursor + text_utf16, "\n"))
-            
-            # Apply heading 1 style to the paragraph (from cursor to cursor + text + newline)
-            end = cursor + text_utf16 + 1
-            requests.append(set_paragraph_heading_style(cursor, end, "HEADING1"))
-            
-            # Apply inline links
-            for link in links:
-                requests.append(update_text_style(
-                    link["start"], link["end"],
-                    {"link": {"url": link["url"]}},
-                    "link"
-                ))
-            
-            cursor = end
-            i += 1
-            continue
-        
-        # Heading 2
-        if stripped.startswith("## "):
-            text = stripped[3:].strip()
-            text, links = parse_link_in_text(text)
-            text_utf16 = utf16_count(text)
-            
-            requests.append(insert_text_at(cursor, text))
-            requests.append(insert_text_at(cursor + text_utf16, "\n"))
-            end = cursor + text_utf16 + 1
-            requests.append(set_paragraph_heading_style(cursor, end, "HEADING2"))
-            
-            for link in links:
-                requests.append(update_text_style(
-                    link["start"], link["end"],
-                    {"link": {"url": link["url"]}},
-                    "link"
-                ))
-            
-            cursor = end
-            i += 1
-            continue
-        
-        # Heading 3
-        if stripped.startswith("### "):
-            text = stripped[4:].strip()
-            text, links = parse_link_in_text(text)
-            text_utf16 = utf16_count(text)
-            
-            requests.append(insert_text_at(cursor, text))
-            requests.append(insert_text_at(cursor + text_utf16, "\n"))
-            end = cursor + text_utf16 + 1
-            requests.append(set_paragraph_heading_style(cursor, end, "HEADING3"))
-            
-            for link in links:
-                requests.append(update_text_style(
-                    link["start"], link["end"],
-                    {"link": {"url": link["url"]}},
-                    "link"
-                ))
-            
-            cursor = end
-            i += 1
-            continue
-        
-        # Horizontal rule (---)
-        if stripped == "---":
-            # Create a paragraph with a horizontal border
-            requests.append(insert_text_at(cursor, "\n"))
-            end = cursor + 1
-            requests.append(update_paragraph_style(cursor, end, {
-                "borderStyle": {
-                    "width": {"magnitude": 1, "unit": "PT"},
-                    "dashStyle": "SOLID_MED",
-                    "foregroundColor": {"opaqueColor": {"blue": 0.5, "green": 0.5, "red": 0.5}},
-                }
-            }, "borderStyle"))
-            # Actually, horizontal rule in Docs API is more complex.
-            # Use a simpler approach: insert a line of underscores or a horizontal rule char
-            # Let's use a paragraph border on bottom
-            cursor = end
-            i += 1
-            continue
-        
-        # Checkbox: - [ ] text or - [x] text
-        checkbox_match = re.match(r'^- \[([ xX])\]\s+(.*)', stripped)
-        if checkbox_match:
-            checked = checkbox_match.group(1).lower() == 'x'
-            label = checkbox_match.group(2)
-            label, links = parse_link_in_text(label)
-            label_utf16 = utf16_count(label)
-            
-            # Insert checkbox character + label text + newline
-            checkbox_char = "☑" if checked else "☐"
-            full_text = checkbox_char + " " + label
-            full_utf16 = utf16_count(full_text)
-            
-            requests.append(insert_text_at(cursor, full_text))
-            requests.append(insert_text_at(cursor + full_utf16, "\n"))
-            end = cursor + full_utf16 + 1
-            
-            # Apply link styles (accounting for checkbox prefix offset)
-            offset = utf16_count(checkbox_char + " ")
-            for link in links:
-                requests.append(update_text_style(
-                    link["start"] + offset, link["end"] + offset,
-                    {"link": {"url": link["url"]}},
-                    "link"
-                ))
-            
-            cursor = end
-            i += 1
-            continue
-        
-        # Bullet list: - text
-        if stripped.startswith("- "):
-            text = stripped[2:]
-            text, links = parse_link_in_text(text)
-            text_utf16 = utf16_count(text)
-            
-            requests.append(insert_text_at(cursor, text))
-            requests.append(insert_text_at(cursor + text_utf16, "\n"))
-            end = cursor + text_utf16 + 1
-            requests.append(set_paragraph_bullet(cursor, end - 1, "BULLET_DISC"))
-            # Wait, the bullet should cover the paragraph. Let me fix:
-            # Actually the paragraph is from cursor to end (including \n)
-            # The bullet applies to the paragraph
-            
-            for link in links:
-                requests.append(update_text_style(
-                    link["start"], link["end"],
-                    {"link": {"url": link["url"]}},
-                    "link"
-                ))
-            
-            cursor = end
-            i += 1
-            continue
-        
-        # Table detection: lines starting with |
-        if stripped.startswith("|") and i + 1 < len(lines) and "|---" in lines[i + 1]:
-            # Collect all table rows
-            table_lines = []
-            while i < len(lines) and lines[i].strip().startswith("|"):
-                table_lines.append(lines[i].strip())
-                i += 1
-            
-            # Parse rows
-            rows = []
-            for row_line in table_lines:
-                cells = [cell.strip() for cell in row_line.strip("|").split("|")]
-                rows.append(cells)
-            
-            # Check for separator row (contains ---)
-            has_separator = rows[1] if len(rows) > 1 else []
-            if has_separator and all(c.strip().startswith("-") for c in has_separator):
-                rows = rows[:1] + rows[2:]  # Remove separator
-            
-            num_cols = max(len(row) for row in rows) if rows else 1
-            num_rows = len(rows)
-            
-            # Pad rows to same length
-            for row in rows:
-                while len(row) < num_cols:
-                    row.append("")
-            
-            # Insert table
-            requests.append({
-                "insertTable": {
-                    "rows": num_rows,
-                    "columns": num_cols,
-                    "TableReference": {"tableId": "", "rowIndex": cursor},
-                    "location": {"segmentId": "", "index": cursor},
-                }
-            })
-            
-            # Fill cells with content
-            # After insertTable, we need to insert text into each cell
-            # Cell content is identified by rowIndex and columnIndex
-            cell_char_count = 1  # Empty table cells get 1 char (the cell boundary)
-            total_table_chars = 0
-            
-            for ri, row in enumerate(rows):
-                for ci, cell_text in enumerate(row):
-                    if cell_text:
-                        cell_text, cell_links = parse_link_in_text(cell_text)
-                    else:
-                        cell_text = ""
-                    
-                    cell_start = cursor + 1 + (ri * num_cols) + ci + 1  # Approximate
-                    # Actually, the Docs API table cell indexing is complex.
-                    # Each cell starts at row * cols + col + some offset.
-                    # We'll insert text at the cell location.
-                    
-                    if cell_text:
-                        # Insert text into the cell
-                        # The cell's text goes at index = table_start_index + cell_offset
-                        # For a table starting at cursor, cell (r,c) text starts at:
-                        # cursor + 1 (table start marker) + r * num_cols (each cell gets index) + c + 1
-                        cell_idx = cursor + 1 + ri * num_cols + ci + 1
-                        cell_utf16 = utf16_count(cell_text)
-                        
-                        requests.append(insert_text_at(cell_idx, cell_text))
-                        
-                        # Apply header row bold if first row
-                        if ri == 0:
-                            requests.append(update_text_style(
-                                cell_idx, cell_idx + cell_utf16,
-                                {"bold": True}, "bold"
-                            ))
-                        
-                        # Apply links
-                        for link in cell_links:
-                            requests.append(update_text_style(
-                                link["start"], link["end"],
-                                {"link": {"url": link["url"]}},
-                                "link"
-                            ))
-                        
-                        total_table_chars += cell_utf16
-            
-            # Add paragraph break after table
-            table_end = cursor + 1 + num_rows * num_cols + 1  # Approximate
-            requests.append(insert_text_at(table_end, "\n"))
-            cursor = table_end + 1
-            continue
-        
-        # Code block
-        if stripped.startswith("```"):
-            code_lines = []
-            i += 1
-            while i < len(lines) and not lines[i].strip().startswith("```"):
-                code_lines.append(lines[i])
-                i += 1
-            if i < len(lines) and lines[i].strip().startswith("```"):
-                i += 1  # Skip closing ```
-            
-            code_text = "\n".join(code_lines)
-            code_text = code_text  # Keep as-is
-            code_utf16 = utf16_count(code_text)
-            
-            requests.append(insert_text_at(cursor, code_text))
-            requests.append(insert_text_at(cursor + code_utf16, "\n"))
-            end = cursor + code_utf16 + 1
-            
-            # Apply monospace font
-            requests.append(update_text_style(
-                cursor, end,
-                {"fontFamily": "Courier New", "fontSize": {"magnitude": 10, "unit": "PT"}},
-                "fontFamily,fontSize"
-            ))
-            
-            cursor = end
-            continue
-        
-        # Blockquote
-        if stripped.startswith("> "):
-            text = stripped[2:]
-            text, links = parse_link_in_text(text)
-            text_utf16 = utf16_count(text)
-            
-            requests.append(insert_text_at(cursor, text))
-            requests.append(insert_text_at(cursor + text_utf16, "\n"))
-            end = cursor + text_utf16 + 1
-            
-            # Apply italic style
-            requests.append(update_text_style(
-                cursor, end,
-                {"italic": True},
-                "italic"
-            ))
-            
-            for link in links:
-                requests.append(update_text_style(
-                    link["start"], link["end"],
-                    {"link": {"url": link["url"]}},
-                    "link"
-                ))
-            
-            cursor = end
-            i += 1
-            continue
-        
-        # Regular paragraph with possible inline formatting
-        text = stripped
-        text, links = parse_link_in_text(text)
-        text_utf16 = utf16_count(text)
-        
-        requests.append(insert_text_at(cursor, text))
-        requests.append(insert_text_at(cursor + text_utf16, "\n"))
-        end = cursor + text_utf16 + 1
-        
-        # Apply inline bold: **text** and italic: *text*
-        # We handle this by finding markdown markers and applying styles
-        # For bold: **text** → wrap in updateTextStyle
-        bold_pattern = r'\*\*([^\*]+)\*\*'
-        italic_pattern = r'\*([^\*]+)\*'
-        code_pattern = r'`([^`]+)`'
-        
-        # Apply bold
-        for m in re.finditer(bold_pattern, text):
-            start = cursor + utf16_count(text[:m.start()])
-            end_b = start + utf16_count(m.group(1))
-            requests.append(update_text_style(start, end_b, {"bold": True}, "bold"))
-        
-        # Apply italic (only single asterisks not part of bold)
-        # Remove bold parts first, then find italic
-        no_bold_text = re.sub(bold_pattern, lambda m: m.group(1), text)
-        for m in re.finditer(italic_pattern, no_bold_text):
-            start = cursor + utf16_count(no_bold_text[:m.start()])
-            end_i = start + utf16_count(m.group(1))
-            requests.append(update_text_style(start, end_i, {"italic": True}, "italic"))
-        
-        # Apply code (monospace)
-        for m in re.finditer(code_pattern, text):
-            start = cursor + utf16_count(text[:m.start()])
-            end_c = start + utf16_count(m.group(1))
-            requests.append(update_text_style(
-                start, end_c,
-                {"fontFamily": "Courier New", "fontSize": {"magnitude": 10, "unit": "PT"}},
-                "fontFamily,fontSize"
-            ))
-        
-        # Apply inline links
-        for link in links:
-            requests.append(update_text_style(
-                link["start"], link["end"],
-                {"link": {"url": link["url"]}},
-                "link"
-            ))
-        
-        cursor = end
-        i += 1
-    
-    return requests
-
-
-def replace_internal_links(md_text):
-    """
-    Replace markdown-style internal references with Drive URLs.
-    
-    Handles patterns like:
-    - `Folder Name` → [Folder Name](URL)
-    - `ID` → [ID](URL) when the ID maps to a known file/folder
-    - Plain text references to known files/folders
-    """
-    # Replace backtick-wrapped IDs with links
-    # Pattern: `ID` where ID is a known Drive ID
-    for name, info in DRIVE_MAP.items():
-        # Replace `Name` with [Name](URL) if not already a link
-        escaped_name = re.escape(name)
-        md_text = re.sub(
-            rf'`({escaped_name})`',
-            rf'[{name}]({info["url"]})',
-            md_text
-        )
-        # Replace ID references like `1abc...` with link
-        if len(info["id"]) > 20:  # Looks like a Drive ID
-            escaped_id = re.escape(info["id"])
-            md_text = re.sub(
-                rf'`({escaped_id})`',
-                rf'[{info["id"]}]({info["url"]})',
-                md_text
-            )
-    
-    return md_text
-
-
-def clear_doc_content(docs, doc_id):
-    """Clear all content from an existing Google Doc."""
+def update_doc_content(docs, doc_id, html_content):
+    """Clear and repopulate a Google Doc with formatted content from HTML."""
+    # Get current doc
     doc = docs.documents().get(documentId=doc_id).execute()
     
-    # Find the last content index
+    # Find last index
     last_index = None
     for elem in doc.get("body", {}).get("content", []):
         if "endIndex" in elem:
             last_index = elem["endIndex"]
     
     requests = []
+    
+    # Clear existing content
     if last_index and last_index > 2:
         requests.append({
             "deleteContentRange": {
-                "range": {
-                    "startIndex": 2,
-                    "endIndex": last_index - 1,
-                }
+                "range": {"startIndex": 2, "endIndex": last_index - 1}
             }
         })
+    
+    # Generate formatting requests
+    content_requests = html_to_docs_requests(html_content)
+    requests.extend(content_requests)
     
     if requests:
         docs.documents().batchUpdate(
@@ -884,221 +706,184 @@ def clear_doc_content(docs, doc_id):
         ).execute()
 
 
-def convert_and_populate(docs, drive, md_entry):
-    """
-    Convert a markdown file to a properly formatted Google Doc.
-    If target_doc_id is None, create a new doc.
-    Otherwise update the existing doc in place.
-    """
-    md_id = md_entry["md_id"]
-    parent_id = md_entry["parent_id"]
-    target_doc_id = md_entry.get("target_doc_id")
-    target_doc_name = md_entry["target_doc_name"]
-    
-    print(f"\n--- Converting: {md_entry['md_name']} ---")
-    
-    # Download markdown content
-    md_content = download_md_content(drive, md_id)
-    print(f"  Downloaded {len(md_content)} characters of markdown")
-    
-    # Replace internal links with Drive URLs
-    md_content = replace_internal_links(md_content)
-    
-    # Convert markdown to Docs API requests
-    requests = convert_md_to_docs_requests(md_content)
-    print(f"  Generated {len(requests)} formatting requests")
-    
-    if target_doc_id:
-        # Update existing doc: clear content first, then insert
-        print(f"  Clearing existing doc {target_doc_id}")
-        clear_doc_content(docs, target_doc_id)
-        
-        # Rebuild cursor from index 2 (start of empty doc content)
-        # After clearing, the doc should have content starting at index 2
-        # Update cursor calculation for fresh insertion
-        # We need to rebuild with correct indices starting from 2
-        fresh_requests = rebuild_requests_with_cursor(requests, start_index=2)
-        if fresh_requests:
-            docs.documents().batchUpdate(
-                documentId=target_doc_id, body={"requests": fresh_requests}
-            ).execute()
-        print(f"  Updated doc: {target_doc_name}")
-        
-        new_doc_id = target_doc_id
-    else:
-        # Create new doc
-        doc_body = {"title": target_doc_name}
-        if parent_id:
-            doc_body["parents"] = [parent_id]
-        
-        doc = docs.documents().create(body=doc_body).execute()
-        new_doc_id = doc["documentId"]
-        print(f"  Created new doc: {new_doc_id}")
-        
-        # Insert formatted content
-        fresh_requests = rebuild_requests_with_cursor(requests, start_index=2)
-        if fresh_requests:
-            docs.documents().batchUpdate(
-                documentId=new_doc_id, body={"requests": fresh_requests}
-            ).execute()
-        print(f"  Populated doc: {target_doc_name}")
-    
-    # Move doc to correct parent if needed
-    if parent_id and target_doc_id:
-        # Check if doc is already in the right folder
-        doc_meta = drive.files().get(fileId=new_doc_id, fields="parents").execute()
-        current_parents = doc_meta.get("parents", [])
-        if parent_id not in current_parents:
-            # Remove from old parent and add to new
-            drive.files().update(
-                fileId=new_doc_id,
-                addParents=parent_id,
-                removeParents=",".join(current_parents),
-                fields="id, parents"
-            ).execute()
-            print(f"  Moved doc to parent folder {parent_id}")
-    
-    return new_doc_id
-
-
-def rebuild_requests_with_cursor(original_requests, start_index=2):
-    """
-    Rebuild request list with correct cursor indices since the original
-    requests were built with a hypothetical cursor.
-    
-    Actually, the convert_md_to_docs_requests function already tracks cursor
-    correctly. This function is a passthrough for the fresh insertion case.
-    """
-    return original_requests
-
-
-def delete_md_file(drive, md_id, md_name):
-    """Permanently delete a markdown file from Drive."""
-    try:
-        drive.files().delete(fileId=md_id).execute()
-        print(f"  Deleted: {md_name}")
-    except Exception as e:
-        print(f"  ERROR deleting {md_name}: {e}")
-
-
-def update_readme_links(docs, drive, readme_doc_id, new_doc_urls):
-    """
-    Update a README Google Doc to have working internal links.
-    
-    Replaces any mention of file names or IDs with proper Google Docs hyperlinks.
-    Uses the Docs API to find and replace text.
-    """
-    # For each README doc, we'll use find-and-replace via Docs API
-    # to convert plain text references to hyperlinks
-    
-    # First, download the current text
-    doc = docs.documents().get(documentId=readme_doc_id).execute()
-    
-    # Get all text from the document
-    text = ""
-    for elem in doc.get("body", {}).get("content", []):
-        if "paragraph" in elem:
-            for para in elem["paragraph"].get("elements", []):
-                if "textRun" in para:
-                    text += para["textRun"].get("content", "")
-    
-    print(f"  Current README text length: {len(text)} chars")
-    
-    # We need to rebuild the README docs with proper formatting too
-    # since they currently have markdown as plain text
-    # The README docs were already Google Docs but with markdown body text
-    # We need to convert them from markdown to proper Docs formatting
-    
-    # The README docs currently store markdown as plain text in the body
-    # We need to clear and re-populate with proper formatting
-    return text
-
-
 def main():
+    import argparse
     parser = argparse.ArgumentParser(
         description="Convert .md files in Google Drive to properly formatted Google Docs"
     )
-    parser.add_argument("--convert", action="store_true", 
-                        help="Convert .md files to formatted Google Docs")
-    parser.add_argument("--delete-md", action="store_true",
-                        help="Delete original .md files after conversion")
-    parser.add_argument("--update-links", action="store_true",
-                        help="Update internal links in README docs")
-    parser.add_argument("--all", action="store_true",
-                        help="Run all steps in order")
+    parser.add_argument("--convert", action="store_true")
+    parser.add_argument("--delete-md", action="store_true")
+    parser.add_argument("--update-readmes", action="store_true")
+    parser.add_argument("--all", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
     
     args = parser.parse_args()
     
     if args.all:
         args.convert = True
         args.delete_md = True
-        args.update_links = True
+        args.update_readmes = True
     
-    drive, docs = get_services()
+    creds = get_creds()
+    drive = build("drive", "v3", credentials=creds)
+    docs = build("docs", "v1", credentials=creds)
     
+    # === Step 1: Convert .md files to Google Docs ===
     if args.convert:
         print("=" * 60)
         print("STEP 1: Converting .md files to Google Docs")
         print("=" * 60)
         
-        for entry in MD_FILES:
+        # Files to convert: (md_id, new_doc_id, parent_id, doc_title, is_new)
+        files = [
+            # Batch 01: update existing Doc
+            ("1YFE8EqQyNJVKKLW6IrBfXNplgH3nLCSp", "1fiyu9wzokeAGVHjAtXPCdXycXqvSyR23Uzp5NWNpyyk",
+             "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
+             "Sister Company Name Research - Enable the Disabled - 2026-09-09", False),
+            # Batch 02: update existing Doc
+            ("1ajDh20i9sgsrjvaogJY94urSaRpRmFGc", "14yTZN9m4f048wy_kfyYPkvykRCPQ41-kk9HPuqIqp3s",
+             "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
+             "Sister Company Name Research - Enable the Disabled - 2026-09-09 - Batch 02", False),
+            # Batch 03: need to create new Doc (no existing Doc for batch 03 alone)
+            ("1q06wAaH_-0hAgrPoOJ0kN_inbwiBCoo-", None,
+             "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
+             "Sister Company Name Research - Enable the Disabled - 2026-09-09 - Batch 03", True),
+            # Combined in name search: update existing Doc (1zj...)
+            ("1_PptdlLnVPNSSQePGayS0W4-C2Czimy_", "1zjBCxJfJQxmTFdUCLpRvjgXTw4TU4xJKIRTYa6AXMXc",
+             "1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G",
+             "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09", False),
+            # Combined in 07_Incorporation: update existing Doc (1XaM...)
+            ("1zSUPQVjD42ES8LPbNmynR7C79zWBLnwl", "1XaM3bFgXBlHH6rMRe9bawar2LZphBOrXoZPUfVjmXE0",
+             "1w2On6DibxG5z0REfgLoBYUEkERwkgSAU",
+             "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09", False),
+        ]
+        
+        for md_id, target_doc_id, parent_id, doc_title, is_new in files:
             try:
-                new_id = convert_and_populate(docs, drive, entry)
-                print(f"  Result: doc_id={new_id}")
+                md_content = download_md(drive, md_id)
+                print(f"\n  Source .md: {doc_title}")
+                print(f"  Size: {len(md_content)} chars")
+                
+                html_content = md_to_html(md_content)
+                print(f"  HTML size: {len(html_content)} chars")
+                
+                if args.dry_run:
+                    print(f"  [DRY RUN] Would {'create' if is_new else 'update'} doc: {doc_title}")
+                else:
+                    if is_new:
+                        new_id = create_formatted_doc(docs, doc_title, parent_id, html_content)
+                        print(f"  Created new Google Doc: {new_id}")
+                        # Update registry
+                        REGISTRY[f"Sister Co Name Research - batch 03 (Doc)"] = new_id
+                    else:
+                        update_doc_content(docs, target_doc_id, html_content)
+                        # Move to correct parent if needed
+                        doc_meta = drive.files().get(
+                            fileId=target_doc_id, fields="parents"
+                        ).execute()
+                        current_parents = doc_meta.get("parents", [])
+                        if parent_id not in current_parents:
+                            drive.files().update(
+                                fileId=target_doc_id,
+                                addParents=parent_id,
+                                removeParents=",".join(current_parents),
+                                fields="id, parents"
+                            ).execute()
+                        print(f"  Updated Google Doc: {target_doc_id}")
+                
             except Exception as e:
                 print(f"  ERROR: {e}")
                 import traceback
                 traceback.print_exc()
     
+    # === Step 2: Delete .md files ===
     if args.delete_md:
         print("\n" + "=" * 60)
         print("STEP 2: Deleting original .md files from Drive")
         print("=" * 60)
         
-        for entry in MD_FILES:
-            try:
-                delete_md_file(drive, entry["md_id"], entry["md_name"])
-            except Exception as e:
-                print(f"  ERROR deleting {entry['md_name']}: {e}")
-    
-    if args.update_links:
-        print("\n" + "=" * 60)
-        print("STEP 3: Updating internal links in README docs")
-        print("=" * 60)
-        
-        # README docs currently have markdown as plain text body
-        # We need to convert them from markdown to proper Docs formatting
-        # and replace all internal references with hyperlinks
-        
-        # The README docs to convert:
-        readme_docs_to_convert = [
-            # (doc_id, doc_title, parent_folder_id, md_source)
-            ("1fxnh1MP1sfKwmQhfvLI49DQHLtBXugrhp_AQLPeBBSQ",
-             "README - Enable the Disabled - Shaun Kehoe",
-             None,
-             "# Enable the Disabled - Shaun Kehoe — README\n\n**Parent:** My Drive > Clients\n**Purpose:** Shared output folder for final deliverables to Shaun Kehoe, the business owner. Contains all external-facing materials, finalized contracts, and client-ready documents.\n**Share target:** Shaun Kehoe (read-only unless Eric explicitly directs otherwise).\n\n## ⚠️ Important\nThis folder is **completely separate** from `Enabling the Disabled - Admin` (Eric's private working folder). Never cross-reference or cross-link between them.\n\n## Contents\n\n### Subfolders\n\n| Name | ID | Purpose |\n|------|----|---------|\n| Brand | 1A45rdYzyLYudsjQEBEm5FcXUDf6198ys | Brand assets | \n| Corporate | 1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-I | Corporate docs |\n| Operations | 1wgqw4-IReNIMFov73r5DCEpvt7Mm9q1y | Operational docs |\n| _archive | 1cezQT8LdBg8Z_YTLdSH1Sgsc2gKdmZHO | Archived versions |\n\n### Files\n\n| Name | Type | Description |\n|------|------|-------------|\n| Trainer_Contractor_Agreement.docx | Word | Root-level orphan |\n\n## Navigation\n\n- Parent: My Drive > Clients\n- Siblings: Enabling the Disabled - Admin\n- Children: README - Brand, README - Corporate, README - Operations, README - _archive\n\n## Next Actions / TODOs\n\n- [ ] Clean up root-level orphan\n- [ ] Ensure contract versions are up to date\n"),
+        md_files = [
+            ("1YFE8EqQyNJVKKLW6IrBfXNplgH3nLCSp", "Sister Company Name Research - Enable the Disabled - 2026-09-09.md"),
+            ("1ajDh20i9sgsrjvaogJY94urSaRpRmFGc", "Sister Company Name Research - Enable the Disabled - 2026-09-09-Batch-02.md"),
+            ("1q06wAaH_-0hAgrPoOJ0kN_inbwiBCoo-", "Sister Company Name Research Batch-03 - Enable the Disabled - 2026-09-09.md"),
+            ("1_PptdlLnVPNSSQePGayS0W4-C2Czimy_", "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09.md (name search)"),
+            ("1zSUPQVjD42ES8LPbNmynR7C79zWBLnwl", "Sister Company Name Research COMBINED - Enable the Disabled - 2026-09-09.md (07_Incorporation)"),
         ]
         
-        for doc_id, doc_title, parent_id, md_content in readme_docs_to_convert:
+        for md_id, name in md_files:
+            if args.dry_run:
+                print(f"  [DRY RUN] Would delete: {name}")
+            else:
+                try:
+                    drive.files().delete(fileId=md_id).execute()
+                    print(f"  Deleted: {name}")
+                except Exception as e:
+                    print(f"  ERROR deleting {name}: {e}")
+    
+    # === Step 3: Reformat README docs ===
+    if args.update_readmes:
+        print("\n" + "=" * 60)
+        print("STEP 3: Reformatting README docs from markdown body to proper Docs")
+        print("=" * 60)
+        
+        readme_docs = [
+            ("1fxnh1MP1sfKwmQhfvLI49DQHLtBXugrhp_AQLPeBBSQ", "README - Enable the Disabled - Shaun Kehoe"),
+            ("1WmrJ6JrXszf5hX9iFLi8iiwXG02-Y-C86qkrozuJNyQ", "README - Corporate (Shared)"),
+            ("13669ge5ZZLWIj4I3O5EYfb0iGnw1LJE9Nb5hoAVlLsM", "README - Brand"),
+            ("1ek6lhXbO5nmkS-oy90o2gN2qtsaEyULC3_qGHAHvC0Y", "README - Operations"),
+            ("1InsOmBFWYI3_TP3z6CqFel3sYI_c3wDQfgKV0qAaCFg", "README - _archive"),
+            ("1eLuGBVo_qQt2nngyH7qtpwE74KmeDfM5Qtuvj5aWuVo", "README - Fact-finding"),
+            ("1k05txlKg_cv-yi8KOLCOooS7qZSdKQUoSRVM3qV2_Rk", "README - Incorporation #1"),
+            ("1rj5CM6WPCyKZ4blOVg5Q4MUcnKhVzoSI5WgUMloaVBI", "README - name search"),
+            ("10-1A6XRI13979YdI3q-4Zvkw0raOLvZs97XVDFa07Aw", "README - Trademark"),
+            ("132q5A6VQiJWQovht14qIsSIi0whe3YwdcPAB9hFbntA", "README - Incorporation #2"),
+            ("1xdsYGcqTVJm5NcrS1cLwg2J92WOsa4vVmDQdkPW93Ng", "README - Corporate (Admin)"),
+            ("1shUm9OVOh5x0gGieaM7FYLExOWRZ2Fw-SiogUfpX4gQ", "README - 08_Security (Admin)"),
+            ("1lYtQHGtDmXI7YNPs6kSSM-FBBRdEiMwPdkZUX7aRceE", "README - Enabling the Disabled - Admin"),
+            ("1blBHVPCVXbg4lmgnOqhY2c1oEQdVapziMOHIZ8BJ2Hc", "Incorporation Checklist"),
+        ]
+        
+        for doc_id, doc_title in readme_docs:
             try:
-                print(f"\n  Converting: {doc_title}")
-                md_content = replace_internal_links(md_content)
-                requests = convert_md_to_docs_requests(md_content)
-                fresh_requests = rebuild_requests_with_cursor(requests, start_index=2)
+                print(f"\n  Processing: {doc_title}")
                 
-                clear_doc_content(docs, doc_id)
-                if fresh_requests:
-                    docs.documents().batchUpdate(
-                        documentId=doc_id, body={"requests": fresh_requests}
-                    ).execute()
-                print(f"  Updated doc with proper formatting and links")
+                # Get current content (stored as markdown text)
+                doc = docs.documents().get(documentId=doc_id).execute()
+                
+                md_text = ""
+                for elem in doc.get("body", {}).get("content", []):
+                    if "paragraph" in elem:
+                        for para in elem["paragraph"].get("elements", []):
+                            if "textRun" in para:
+                                md_text += para["textRun"].get("content", "")
+                    elif "table" in elem:
+                        for row in elem["table"].get("tableRows", []):
+                            for cell in row.get("tableCells", []):
+                                for elem2 in cell.get("content", []):
+                                    if "paragraph" in elem2:
+                                        for para in elem2["paragraph"].get("elements", []):
+                                            if "textRun" in para:
+                                                md_text += para["textRun"].get("content", "")
+                            md_text += "\n"
+                
+                if not md_text.strip():
+                    print(f"    Skipping (empty)")
+                    continue
+                
+                print(f"    Source: {len(md_text)} chars")
+                
+                if args.dry_run:
+                    print(f"    [DRY RUN] Would reformat with proper Docs formatting")
+                else:
+                    html_content = md_to_html(md_text)
+                    print(f"    HTML: {len(html_content)} chars")
+                    update_doc_content(docs, doc_id, html_content)
+                    print(f"    Reformatted: {doc_title}")
+                
             except Exception as e:
-                print(f"  ERROR: {e}")
+                print(f"    ERROR: {e}")
                 import traceback
                 traceback.print_exc()
-        
-        print("\n  NOTE: Full README conversion requires reading each doc's current content.")
-        print("  See repo: skills/03_folder-index/scripts/convert_readme_docs.py")
     
     print("\n" + "=" * 60)
     print("DONE")
