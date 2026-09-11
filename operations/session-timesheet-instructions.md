@@ -138,9 +138,9 @@ Issues: missing date, missing time, missing scheduled time, vague results, no at
 
 ## Where to Find It
 
-The Google Sheet lives here: *[link will be inserted when the sheet is created]*
+The Google Sheet lives here: **https://docs.google.com/spreadsheets/d/1qXs6SbayjgRNRN73mFTTYluclromnuGkstbsfFPH_2I/edit**
 
-You only need a browser to access it — no special software. Eric will share it directly with your Google account.
+It's in the Operations folder of the shared Google Drive. You only need a browser to access it — no special software. Eric will also share it directly with your Google account for email notifications.
 
 ---
 
