@@ -2,7 +2,7 @@
 
 **Prepared for:** Sean H., Charlotte, and any trainer delivering Enable the Disabled sessions
 **Prepared by:** Eric Hollebone / fitness-strategist
-**Status:** Draft — will be shared to Google Drive once approved
+**Status:** Final — live in Google Drive
 **Purpose:** Every session you deliver must be recorded in this timesheet to get paid. If it's not in this sheet, you don't get paid for it.
 
 ---
@@ -11,8 +11,8 @@
 
 1. **Fill out one row per session you deliver.** One row = one paid session.
 2. **Write the row immediately after the session ends** — same day, while it's fresh. Don't batch at the end of the week.
-3. **Sign your initials in the Attestation column** — this is your written confirmation that the session happened. No initials = unpaid session.
-4. **Eric reviews and approves for payroll** — the Attestation column gets a checkmark (✓) when Eric has verified the client, time, and results against the calendar.
+3. **Eric checks your rows against the calendar** — every entry must match a scheduled appointment. Row matches calendar = you get paid. Row doesn't match = held.
+4. **Row 2 is an example** — copy the format, then start entering your own sessions below it.
 
 ---
 
@@ -54,16 +54,16 @@ The date the session was delivered (not the date you're filling it in). Use `YYY
 ### 2. Time
 Start and end time of the actual session (not when you arrived). Use 24-hour format, e.g., `10:00-11:00`.
 
-### 3. Client Name
-Full name of the client you served. This must match the calendar booking. If the client has a nickname on the calendar, use that — just be consistent.
+### 3. Client
+Name of the client you served. This is how Eric verifies against the calendar — use the name that appears in the calendar booking.
 
-### 4. Category
-Pick from the five categories above. Use the dropdown in the Google Sheet.
+### 4. Type
+Pick from the five categories above. **Use the dropdown** — don't type freehand.
 
-### 5. Scheduled Time
-The time the session was booked for on the calendar (start–end). This lets Eric cross-check against the calendar. If the session ran long or started late, still record what was scheduled.
+### 5. Sched
+The time the session was booked for on the calendar (start–end). This lets Eric cross-check. If the session ran long or started late, still record what was scheduled.
 
-### 6. Session Results (brief)
+### 6. Results
 A 1–2 sentence note on what happened. Examples:
 
 - "Completed upper body strength circuit, client reported reduced shoulder pain"
@@ -73,50 +73,35 @@ A 1–2 sentence note on what happened. Examples:
 
 **Why this matters:** Eric uses this to verify the session was substantive (not just a check-in) and to spot patterns in client progress.
 
-### 7. Trainer
-Your name (Sean H., Charlotte, or Shaun). This is a dropdown.
-
-### 8. Attestation (Your Signature)
-Type your initials here after filling out the row. This is your written attestation that:
-
-- You delivered the session listed
-- The time and client are correct
-- The session results are accurate
-
-Example: `SH` for Sean H.
-
-### 9. Approved (Eric's Checkmark)
-**Leave this blank.** Eric fills this in with a ✓ after verifying against the calendar. You will NOT get paid for rows where this is blank.
-
 ---
 
 ## Payroll Connection
 
-Every week, Eric runs payroll by filtering this sheet for:
-- Rows with an **Approved ✓** in column 9
-- Within the payroll period (Friday–Thursday or as agreed)
+Every week, Eric:
+1. Filters the sheet for the pay period date range
+2. Checks each row against the calendar booking
+3. Pays for rows that match a verified appointment
 
-Rows without the ✓ are held until verification. If your row is missing the ✓ by payroll deadline, it rolls to next period. To avoid delays:
-
+Rows that don't match the calendar are held. To avoid delays:
 - Fill your row **same day** as the session
-- Include a **real session result** — empty results get held
-- Make sure your **initials are legible**
+- Include a **real result** — empty or generic results get held
+- Make sure the **client name and scheduled time match the calendar**
 
 ---
 
 ## Examples
 
-### ✅ Good Row
-| Date | Time | Client Name | Category | Scheduled Time | Session Results | Trainer | Attestation | Approved |
-|------|------|-------------|----------|----------------|-----------------|---------|-------------|----------|
-| 2026-09-15 | 10:00-11:00 | Danny M. | Gym - 1:1 | 10:00-11:00 | Upper body strength: 3x10 DB rows @35lb, client hit new rep count | Sean H. | SH | ✓ |
+### ✅ Filled-out row (after copying the example)
+| Date | Time | Client | Type | Sched | Results |
+|------|------|--------|------|-------|---------|
+| 2026-09-15 | 10:00-11:00 | Danny M. | Gym - 1:1 | 10:00-11:00 | Upper body strength: 3x10 DB rows @35lb, client hit new rep count |
 
-### ❌ Bad Row (will be held)
-| Date | Time | Client Name | Category | Scheduled Time | Session Results | Trainer | Attestation | Approved |
-|------|------|-------------|----------|----------------|-----------------|---------|-------------|----------|
-| 2026-09-15 | | Danny M | | | did gym stuff | | | |
+### ❌ Bad row (will be held)
+| Date | Time | Client | Type | Sched | Results |
+|------|------|--------|------|-------|---------|
+| 2026-09-15 | | Danny M |  |  | did gym stuff |
 
-Issues: missing date, missing time, missing scheduled time, vague results, no attestation.
+Issues: missing time, no Type (should use dropdown), missing Sched, vague results.
 
 ---
 
@@ -126,21 +111,33 @@ Issues: missing date, missing time, missing scheduled time, vague results, no at
 
 2. **Results can't be blank.** "Did workout" is not enough. Say what you did and how it went.
 
-3. **Same-day or next-day entries only.** Anything older than 48 hours needs Eric's explicit OK before the ✓.
+3. **Same-day or next-day entries only.** Anything older than 48 hours needs Eric's explicit OK before payment.
 
-4. **Rescheduled sessions?** Keep the original scheduled time in column 5 and note the actual time in column 2. Add a note in results: "Rescheduled from 10am to 2pm due to client migraine."
+4. **Rescheduled sessions?** Keep the original scheduled time in "Sched" and note the actual time in "Time". Add a note in Results: "Rescheduled from 10am to 2pm due to client migraine."
 
-5. **Group sessions — list all client names.** Put "Group: [Client1, Client2, Client3]" in the Client Name column. You still get paid per the group rate.
+5. **Group sessions — list all client names.** Put "Group: [Client1, Client2, Client3]" in the Client column. You still get paid the group rate.
 
-6. **If you deliver a session someone else was scheduled for** (substitution), put the original trainer's name in a note in results and let Eric know. Don't just silently take over.
+6. **If you deliver a session someone else was scheduled for** (substitution), note it in Results: "Substituting for Shaun — covering John P.'s session." and let Eric know.
+
+---
+
+## How to Fill It Out on Your Phone
+
+1. Open the **Google Sheets** app (free on the App Store)
+2. The sheet is already shared with you — look for **"Enable the Disabled - Session Time Record"**
+3. Tap the **+** at the bottom of the last row to add a new row
+4. Fill each column left-to-right
+5. For **Type** and **Trainer** columns, tap the cell and you'll see a dropdown arrow — tap it to pick from the list
+6. **Pro tip:** Use voice-to-text for the Results column — tap the cell, tap the microphone on your keyboard, and speak your 1-2 sentence summary
+7. Switch to the **Quick Reference** tab anytime for a reminder of what each column needs
 
 ---
 
 ## Where to Find It
 
-The Google Sheet lives here: **https://docs.google.com/spreadsheets/d/1qXs6SbayjgRNRN73mFTTYluclromnuGkstbsfFPH_2I/edit**
+**Link:** https://docs.google.com/spreadsheets/d/1qXs6SbayjgRNRN73mFTTYluclromnuGkstbsfFPH_2I/edit
 
-It's in the Operations folder of the shared Google Drive. You only need a browser to access it — no special software. Eric will also share it directly with your Google account for email notifications.
+It's in the Operations folder of the shared Google Drive. You only need a browser or the Google Sheets app — no special software. Eric will share it directly with your Google account for email notifications.
 
 ---
 

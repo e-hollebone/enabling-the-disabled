@@ -23,10 +23,11 @@ metadata:
 - You need to audit security posture across all accounts (e.g., "which accounts have no MFA?").
 
 ## Prerequisites
-- Google Sheets API auth for the `fitness-strategist` profile (same token as `google-workspace` skill).
-- The inventory Sheet ID: `1H5VapzupQpUiXrviu1cmrukEnNWCFJu84VptwMRqolQ`
-- Reference: `documents/security-inventory/drive-structure.md` for folder context.
-- Reference: `documents/security-inventory/README.md` for column definitions.
+|- Google Sheets API auth for the `fitness-strategist` profile (same token as `google-workspace` skill).
+|- The inventory Sheet ID: `1H5VapzupQpUiXrviu1cmrukEnNWCFJu84VptwMRqolQ`
+|- Reference: `documents/security-inventory/drive-structure.md` for folder context.
+|- Reference: `documents/security-inventory/README.md` for column definitions.
+|- Reference: `references/sheets-api-batchupdate.md` for batchUpdate field-name gotchas and mobile optimization patterns (use when creating or formatting new sheets via the API).
 
 ## Inventory Sheet Structure
 
@@ -160,12 +161,13 @@ sheets.spreadsheets().values().update(
 | MFA methods in use | Tab 1 + Tab 2, Column 8 (MFA Method) — distinct values |
 
 ## Pitfalls
-- **Row 1 is always headers** — data starts at row 2. If the sheet was manually edited and row 1 got cleared, re-apply headers from the CSV templates.
-- **Empty rows** — Google Sheets returns `[]` for completely empty rows. Filter them out before processing.
-- **Tab names matter** — the API requires exact tab names: `Account Security Inventory`, `Application Platforms`, `Physical Assets`.
-- **CSV mirrors are templates only** — they contain the header row and empty data rows. Live data is in the Google Sheet.
-- **Shaun may enter "Yes"/"No" or "yes"/"no"** — queries should be case-insensitive.
-- **Do not update live inventory cells without Eric's approval** — these are Shaun's records.
+|- **Row 1 is always headers** — data starts at row 2. If the sheet was manually edited and row 1 got cleared, re-apply headers from the CSV templates.
+|- **Empty rows** — Google Sheets returns `[]` for completely empty rows. Filter them out before processing.
+|- **Tab names matter** — the API requires exact tab names: `Account Security Inventory`, `Application Platforms`, `Physical Assets`.
+|- **CSV mirrors are templates only** — they contain the header row and empty data rows. Live data is in the Google Sheet.
+|- **Shaun may enter "Yes"/"No" or "yes"/"no"** — queries should be case-insensitive.
+|- **Do not update live inventory cells without Eric's approval** — these are Shaun's records.
+|- **Token refresh failures are often transient** — if `setup.py --check` reports `TOKEN_REVOKED` / `invalid_grant`, the refresh token is usually still valid. The `_forced_refresh_fallback()` in `setup.py` retries via direct `urllib` POST to Google's token endpoint. Do NOT delete the token file without confirming the fallback failed. See `references/sheets-api-batchupdate.md` for details.
 
 ## Verification
 - After creating a query script, run it against the live sheet and confirm at least the header row matches.
