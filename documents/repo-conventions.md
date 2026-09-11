@@ -1,99 +1,89 @@
-# Repository Conventions & Document Organization
+# Repo Conventions
 
-**Last updated:** 2026-08-27  
-**Purpose:** How documents are organized across systems, what goes where, and why.
+*Auto-generated reference — last updated by fitness-strategist*
 
----
+## File Formats
 
-## GitHub Repository — `enabling-the-disabled`
+| Location | Format | Notes |
+|----------|--------|-------|
+| `enabling-the-disabled/` (Git repo) | Markdown (`.md`) | Source of truth for all internal documentation |
+| Google Drive (Enable the Disabled folders) | Google Docs / Sheets / Slides / PDFs | Published deliverables for Shaun; never `.md` |
 
-**URL:** https://github.com/e-hollebone/enabling-the-disabled  
-**Visibility:** Public  
-**Default branch:** `main`  
-**Authoring profile:** `fitness-strategist` (Hermes)
+## Drive Policy (Updated)
 
-### Folder structure
+> **No `.md` files in Google Drive for this project.** All documents must be native Google Drive file types (Google Docs, Sheets, Slides) or binary (PDF, PNG). Markdown lives only in the repo. When a `.md` file appears in Drive, it must be converted to a Google Doc and the `.md` deleted.
 
+### Rationale
+Team members (including Shaun Kehoe) have no Markdown viewer. `.md` files render as plain, unformatted text — unreadble and unactionable.
+
+## Directory Structure (Enable the Disabled)
+
+### Shared Output Tree
 ```
-enabling-the-disabled/
-├── README.md                          # Repo overview, layout, phases
-├── AGENTS.md                          # Project conventions for authoring profile
-├── branding/                          # Brand voice, naming, positioning, creative copy
-├── documents/
-│   ├── journal.md                     # Time-based record of major interactions
-│   ├── effort-log.csv                 # Effort tracking (date, hours, subject, category, notes)
-│   ├── key-facts.md                   # Key facts about the business (initial draft)
-│   ├── profile-identity.md            # Canonical source of truth for fitness-strategist profile
-│   ├── needs-documents/
-│   │   ├── business-context-collection.md   # Filled-in business profile
-│   │   ├── business-needs-inventory.md      # Living needs table (template)
-│   │   ├── current-state-assessment.md      # Assessment template (post-collection)
-│   │   └── shaun-questions-round-1.md       # Question batches for Shaun
-│   └── analysis/
-│       └── social-media-website-analysis.md # Strengths & weaknesses (point-in-time)
-├── legal-finance/                     # Pricing, contracts, legal, finance
-├── marketing/                         # Marketing plans, content, outreach
-└── operations/                        # Operational processes, workflows, delivery logistics
+Enable the Disabled - Shaun Kehoe (17Sav0cJmDafe8DDvHKKq0OT1awzQ0ik8)
+├── README - Enable the Disabled - Shaun Kehoe (doc)
+├── Brand (1A45rdYzyLYudsjQEBEm5FcXUDf6198ys)
+│   ├── README - Brand (doc)
+│   └── [logo, banner, trademark PDFs]
+├── Corporate (1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-O)
+│   ├── README - Corporate (doc)
+│   ├── 00_Fact-finding (1reMboKf5TezQWDZ9E55H7v3LyxelA5oH)
+│   │   ├── README - Fact-finding (doc)
+│   │   └── [scheduling Qs, business profile, direction doc]
+│   ├── 07_Incorporation (1w2On6DibxG5z0REfgLoBYUEkERwkgSAU)
+│   │   ├── README - Incorporation (doc)
+│   │   ├── Incorporation Checklist (doc)
+│   │   └── name search (1eLqAzm2dZXpj7_YiHi6XGplIOFJT2f8G)
+│   │       ├── README - name search (doc)
+│   │       └── [name research docs — Google Docs only]
+│   ├── 08_Trademark (1omvZoaW1v63lMHFEgrNcxI4e8xtpaTR8)
+│   │   └── README - Trademark (doc)
+│   └── Incorporation (1TxWJJfsh1rm0lFzBTxpyHA56eLp5ncm5) [second — investigate]
+│       └── README - Incorporation (second) (doc)
+├── Operations (1wgqw4-IReNIMFov73r5DCEpvt7Mm9q1y)
+│   ├── README - Operations (doc)
+│   ├── 01_Clients (1H0dGCPgf3tT8bYDCp9prGWJT9ub9fgIt)
+│   ├── 02_HR-Workforce (1Y-mz3Dqsd1rBcY6lohx4cTNYefETcqW3)
+│   ├── 04_IT-Infrastructure (1gNcp_RPinZ2ofaSnf5cE2URko-Q3AR1z)
+│   ├── 08_Security (1oTb65y2-xWLmNGa5nZoMYqHqOdiZY_uB)
+│   │   └── README - 08_Security (Shared) (doc) [needs creation]
+│   ├── 09_Other (1WagBxHIuwam9jXlUTN5Ejm0TxSktkFaz)
+│   └── 03_Operations (1PV6qMwgnj9ATjhWA9p9Tb0S9x4Bg1Hyb)
+└── _archive (1cezQT8LdBg8Z_YTLdSH1Sgsc2gKdmZHO)
+    ├── README - _archive (doc)
+    ├── originals (1sqNlbb-cUM1noX_a__SZAsmcSnytz679)
+    └── word-versions (1tT3kL3jv6Fa4sNwcsA7sYmmi8_luQYAh)
 ```
 
-### What lives here
+### Admin Tree (Private)
+```
+Enable the Disabled - Admin (1_YpciYU1uRS53ol74oqojUKlUKSQF4BJ)
+├── README - Enabling the Disabled - Admin (doc)
+├── Corporate (1tH7rTwRGkjaj8KrZheNAkyLBSEkCdM4x)
+│   └── 08_Security (14Ek0zgqHHpXuuBtoe7EJDRUwjpTRu_Iy)
+│       ├── README - 08_Security (Admin) (doc)
+│       └── [Account & Asset Inventory (sheet)]
+└── [Effort Log (sheet), Journal (doc), Opp notes (doc)]
+```
 
-- All business documents (drafts, templates, assessments)
-- Journal of major interactions
-- Effort log
-- Question lists for Shaun
-- Analysis documents
-- Brand, marketing, operations, legal/finance documents (as they're produced)
+## Internal Linking Convention
 
-### Commit conventions
+All internal references to folders and files in Google Drive must be **clickable links** in Google Docs, not plain text. The format is:
 
-- Atomic, descriptive commits
-- Each answer or clarification is a commit
-- Clear messages describing what changed and why
+- **Folders:** `[Folder Name](https://drive.google.com/drive/folders/FOLDER_ID)`
+- **Files:** `[File Name](https://docs.google.com/document/d/DOC_ID/edit)` (or appropriate Google Docs/Sheets URLs)
 
----
+When a README references a child document, subfolder, or sibling, it must link directly to that item — not just display its name or ID.
 
-## Google Drive
+## Markdown in Google Docs
 
-### Shared Output Folder — `My Drive > Clients > Enable the Disabled - Shaun Kehoe/`
+Google Docs store body text via the Docs API as structured elements (paragraphs, text runs with styling). Markdown source in the repo is converted to Google Docs formatting (headings, bold, tables, lists, checkboxes) using the Docs API `batchUpdate` method. The conversion is handled by the `google_api.py` script's docs commands.
 
-**Purpose:** External-facing materials only  
-**Access:** Shared with external parties  
-**Rule:** Read-only unless Eric explicitly directs otherwise  
-**Contents:**
-- `Enable-the-disabled-banner.png`
-- 5 Google Docs (contracts, waivers, agreements)
-- `originals/` — original contract documents
-- `word-versions/` — Word format versions
+## Repo Mirror Convention
 
-### Admin Working Folder — `My Drive > Clients > Enabling the Disabled - Admin/`
-
-**Purpose:** Internal working documents  
-**Access:** Eric and fitness-strategist only  
-**Contents:**
-- `Effort Log` (Google Sheet) — mirror of repo effort-log.csv
-- `Journal` (Google Doc) — mirror of repo journal.md
-
----
-
-## Document Flow
-
-1. **Collect** — gather facts from Eric and Shaun → store in `documents/`
-2. **Assess** — analyze and structure → store in `documents/analysis/`
-3. **Build** — produce forward-moving documents → store in `branding/`, `marketing/`, `operations/`, `legal-finance/`
-4. **Share** — when a document is ready for external eyes → move to shared output folder (with Eric's approval only)
-
----
-
-## Key Contacts
-
-| Resource | Value |
-|----------|-------|
-| Business owner | Eric |
-| Business timezone | America/Toronto (EDT, UTC-04:00) |
-| Profile wrapper | `/home/hermes/.local/bin/fitness-strategist` |
-| Profile directory | `~/.hermes/profiles/fitness-strategist/` |
-| Repo (local) | `/home/hermes/enabling-the-disabled` |
-| Repo (web) | `https://github.com/e-hollebone/enabling-the-disabled` |
-| Repo (SSH) | `git@github.com:e-hollebone/enabling-the-disabled.git` |
-| Git auth | `gh` CLI, user `e-hollebone`, full repo admin |
+README files in Drive document where they are mirrored in the repo:
+- `legal-finance/` ← name research docs
+- `documents/security-inventory/` ← security inventory sheets/templates
+- `documents/needs-documents/` ← fact-finding documents
+- `documents/journal.md` ← Journal doc (two-way mirror)
+- `documents/effort-log.csv` ← Effort Log sheet (two-way mirror)
