@@ -150,25 +150,70 @@ Links use Google Docs share URLs (extract `webViewLink` from Drive API responses
 
 | Folder | README in Repo? | README as Google Doc in Drive? | Status |
 |--------|----------------|-------------------------------|--------|
-| Admin root | Not yet | No | Needs creation |
-| Admin > Corporate | Not yet | No | Needs creation |
-| Admin > Corporate > 08_Security | Partial (inventory README) | No | Needs completion |
-| Shared root | Not yet | No | Needs creation |
-| Shared > Corporate | Not yet | No | Needs creation |
-| Shared > Corporate > Fact-finding | Not yet | No | Needs creation |
-| Shared > Corporate > Incorporation | Not yet | No | Needs creation (note: two Incorporation folders) |
-| Shared > Corporate > Trademark | Not yet | No | Needs creation |
-| Shared > Operations | Not yet | No | Needs creation |
-| Shared > Operations > 01_Clients | Not yet | No | Needs creation |
-| Shared > Operations > 02_HR-Workforce | Not yet | No | Needs creation |
-| Shared > Operations > 08_Security | No | Yes (Comms Sheet only) | Needs README |
-| Shared > Operations > 09_Other | Not yet | No | Needs creation |
+| Admin root | Yes | Yes | ✅ Complete |
+| Admin > Corporate | Yes | Yes | ✅ Complete |
+| Admin > Corporate > 08_Security | Partial (inventory README) | Yes | ✅ Complete |
+| Shared root | Yes | Yes | ✅ Complete |
+| Shared > Corporate | Yes | Yes | ✅ Complete |
+| Shared > Corporate > Fact-finding | Yes | Yes | ✅ Complete |
+| Shared > Corporate > Incorporation (×2) | Yes | Yes | ✅ Complete (two separate READMEs) |
+| Shared > Corporate > Trademark | Yes | Yes | ✅ Complete |
+| Shared > Operations | Yes | Yes | ✅ Complete |
+| Shared > Operations > 01_Clients | Yes | Yes | ✅ Complete |
+| Shared > Operations > 02_HR-Workforce | Yes | Yes | ✅ Complete |
+| Shared > Operations > 03_Operations | Yes | Yes | ✅ Complete |
+| Shared > Operations > 04_IT-Infrastructure | Yes | Yes | ✅ Complete |
+| Shared > Operations > 08_Security | Yes | Yes | ✅ Complete |
+| Shared > Operations > 09_Other | Yes | Yes | ✅ Complete |
+| Shared > name search | Yes | Yes | ✅ Complete |
+| Shared > _archive | Yes | Yes | ✅ Complete |
+| Incorporation Checklist | Yes | Yes | ✅ Complete |
 
 ## Pitfalls
+
 - **Two "Incorporation" folders** in `Shared > Corporate/` — each needs its own README to disambiguate.
 - **Shortcuts** in Drive appear as files but are not real files — document them as shortcuts in the README.
 - **The root-level `Trainer_Contractor_Agreement.docx`** in the Shared folder is an orphan — reference it in the Shared root README.
 - **Never cross-link Admin↔Shared** — each tree's README links only within its own tree.
+
+## Conversion Workflow (Markdown → Google Docs)
+
+### Key Technique: HTML Import via Drive API `files().update()`
+
+**Do NOT** use the Docs API `batchUpdate` to rewrite doc content — it is complex (requires index tracking, two-phase insert-then-style, and is prone to offset bugs). Instead:
+
+1. Convert markdown → HTML using Python's `markdown` library (with `tables`, `fenced_code`, `sane_lists`, `nl2br` extensions).
+2. Wrap the HTML in a `<!DOCTYPE html>` document with embedded CSS for styling (headings, code blocks, tables, links, blockquotes).
+3. Import HTML to Google Docs via **Drive API `files().update(fileId=..., media_body=media)`** — this replaces the entire doc content in-place, **preserving the doc ID, permissions, comments, and folder location**. Use `MediaIoBaseUpload` with `mimetype="text/html"`.
+4. For NEW docs, use `files().create(body={"name": title, "mimeType": "application/vnd.google-apps.document", "parents": [parent_id]}, media_body=media)`.
+
+**Critical pitfall:** Drive API `files().update()` with `media_body` will silently fail if the `fileId` doesn't exist or is in trash. Wrap in try/except and fall through to create new if update fails. But the create-new path will produce duplicate docs with new IDs — always verify the doc exists first with `drive.files().get(fileId=doc_id)`.
+
+### Internal Link Replacement
+
+Internal links in markdown use backtick-wrapped names like `` `Enable the Disabled - Shaun Kehoe` `` or file IDs like `` `17Sav0cJmDafe8DDvHKKq0OT1awzQ0ik8` ``.
+
+The conversion script's `replace_internal_links()` function:
+1. Iterates over a REGISTRY mapping (name → (file_id, type)) in order of longest name first.
+2. Replaces backtick-wrapped names/IDs with a sentinel marker containing the name and the Google Drive URL.
+3. Converts sentinels to markdown links `[name](url)` at the end.
+4. The markdown→HTML converter renders these as `<a href="url">` tags, which Google Docs HTML import renders as clickable hyperlinks.
+
+**REGISTRY must be kept in sync with actual Drive IDs.** After any doc recreation or ID change, update the REGISTRY immediately. Use a lookup dict that maps doc names to IDs, and verify against Drive before processing.
+
+### Token Management
+
+The script reads credentials from `/home/hermes/.hermes/profiles/fitness-strategist/google_token.json` (profile-scoped token path). The `get_creds()` function should **save the refreshed token** back to disk so future runs start with a valid token:
+
+```python
+creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
+if creds.expired and creds.refresh_token:
+    creds.refresh(Request())
+    with open(TOKEN_PATH, 'w') as f:
+        f.write(creds.to_json())
+```
+
+**Never copy tokens between profiles** — the profile token is user-scoped but copying another profile's token (e.g., herschel) can overwrite the correct token with one that has wrong scopes.
 
 ## Verification
 - After creating a README, verify the Doc exists in the target folder via `drive search "README - [Folder Name]"`.
