@@ -309,9 +309,73 @@ This document compiles research on calendar and appointment scheduling solutions
 - ⚠️ QB via middleware
 - ⚠️ Interface is dated
 
----
+|---
 
-## Disqualified Tools (No Native Mobile Calendar Sync)
+## Pricing, Trial & Demo Matrix
+
+| Tool | Free Tier | Free Trial | Trial Period | Trial Limitations | Paid Plans | Demo Available | Notes |
+|------|-----------|------------|--------------|-------------------|------------|----------------|-------|
+| **Calendly** | ✅ Yes (1 event type, 1 calendar) | ✅ Yes | 14 days Pro | No credit card | Pro $8, Teams $12, Enterprise $21 /month | Web demo | Free plan very limited (1 event type). Apple iCal sync ended Aug 2024 |
+| **Vagaro** | ❌ No | ✅ Yes | 30 days | All features except email/SMS marketing & branded app | $23.99–$83.99/month + QB add-on | ✅ Yes | 30-day trial is the only way to test. Staff calendar sync supports Google Calendar only |
+| **Jobber** | ❌ No | ✅ Yes | 14 days | Full feature access | $90–$250+/month (3–20+ users) | ✅ Yes | 30-day money-back guarantee. Overkill for 30 clients |
+| **Trafft** | ✅ Yes (5 users, 1 location) | ✅ Yes | 14 days | All premium features | $22.7–$79/month + Scaling $39.9/month | ✅ Yes | Free plan is usable: unlimited apps, calendar sync, mobile apps |
+| **HoneyBook** | ❌ No | ✅ Yes | 7 days (some sources say 30) | All features | $39–$79/month | ✅ Yes | No credit card required. 60-day money-back guarantee |
+| **Microsoft Bookings** | ✅ Yes (with M365) | ✅ Yes | 30 days | All M365 features | $6–$12.50/user/month (Business plans) | ✅ Yes | Bookings is free with M365 Business. Mobile apps were discontinued Dec 2022 |
+| **Setmore** | ✅ Yes (4 users, 200 appointments) | ✅ Yes | 14 days | All Pro features | Free, Pro $5–$12/user/month (annual) | ✅ Yes | Free plan caps at 200 appointments/month & 4 users. Two-way sync only on Pro |
+| **SuperSaaS** | ✅ Yes (50 bookings, ads) | ✅ Yes | 7–30 days | All features except ads | Free, Plus $9–$48/month | ✅ Yes | Free plan is ad-supported. No native phone calendar sync — Google Calendar only |
+| **SavvyCal** | ⚠️ Limited (meeting polls only) | ✅ Yes | 7 days | All features | Free, Basic $12, Premium $20/user/month (annual) | ✅ Yes | Free is not for booking links — only meeting polls. Apple Calendar not directly supported |
+| **YouCanBookMe** | ❌ No | ✅ Yes | 14 days | All Professional features | Free, Individual $7.20, Professional $13–$21/month | ✅ Yes | Free plan: 1 user, 1 calendar. No Apple native calendar sync |
+| **SimplyBook** | ✅ Yes (50 bookings, 1 provider) | ✅ Yes | 14 days | All premium features | €0–€59.9/month + per-feature modules | ✅ Yes | Free plan: 50 bookings/month, 1 provider. One premium feature only. Manual monthly renewal required |
+| **Acuity (Squarespace)** | ❌ No | ✅ Yes | 7 days | All features | $16–$49/month | ✅ Yes | No credit card needed. No free plan. Strong Google Calendar integration |
+| **Koalendar** | ✅ Yes (2 calendars, 1 user) | ✅ Yes | 7 days | All Pro features | Free, Pro $8–$16/user/month (annual) | ✅ Yes | True free forever plan. 2-way sync with Google, Apple, Outlook on Pro |
+| **Cal.com** | ✅ Yes (individual) | ✅ Yes | 3 days | All features | Free, Teams $12, Organizations $28/user/month | ✅ Yes | Free for individuals. Can self-host open source version |
+| **Reservio** | ✅ Yes (40 bookings/30 days) | ❌ No | 40 bookings | 100 client limit | Free, $9–$29/month | ✅ Yes | Free tier: 40 bookings/month, 100 clients. No Apple native calendar sync |
+| **Chili Piper** | ❌ No | ❌ No | ❌ No | N/A — no trial | $15K+/year | ✅ Request | Enterprise-only. Priced per seat at $50+/user/month |
+
+### Free Tier Summary (Best for Testing)
+
+| Tool | Free Plan | Key Limitation | Native Mobile Calendar |
+|------|-----------|---------------|----------------------|
+| **Trafft** | ✅ 5 users, 1 location, unlimited appointments | No SMS, limited reports | ✅ Yes (Apple, Google, Outlook) |
+| **Setmore** | ✅ 4 users, 200 appointments | No two-way sync, no SMS reminders on free | ⚠️ 1-way iPhone sync only |
+| **Calendly** | ✅ 1 event type, 1 calendar | Only 1 event type, no SMS | ❌ Apple Calendar discontinued |
+| **SuperSaaS** | ✅ 50 bookings, ads shown | Ads, 50 booking limit | ❌ No native phone sync |
+| **SimplyBook** | ✅ 50 bookings, 1 provider | 50 bookings/month, manual renewal | ❌ No native Apple/Android sync |
+| **Koalendar** | ✅ 2 calendars, 1 user | 2 calendar connections | ✅ Yes (2-way on Pro) |
+| **Microsoft Bookings** | ✅ With M365 subscription | Requires M365 Business | ⚠️ Via Outlook on phone only |
+| **Cal.com** | ✅ Individual plan | No team features | ✅ Yes (2-way) |
+
+### Free Trial Summary (Best for Short-Term Testing)
+
+| Tool | Trial Length | No Credit Card? | Full Features? | Notes |
+|------|-------------|-----------------|---------------|-------|
+| **Vagaro** | 30 days | ✅ Yes | ✅ Yes | All features except email/SMS marketing |
+| **Jobber** | 14 days | ✅ Yes | ✅ Yes | 30-day money-back guarantee |
+| **Trafft** | 14 days | ✅ Yes | ✅ Yes | Free plan also available |
+| **HoneyBook** | 7 days | ✅ Yes | ✅ Yes | 60-day money-back on paid plans |
+| **Setmore** | 14 days | ✅ Yes | ✅ Yes | Free plan also available forever |
+| **Calendly** | 14 days | ✅ Yes | ✅ Yes | Free plan also available forever |
+| **SimplyBook** | 14 days | ✅ Yes | ✅ Yes | Free plan also available forever |
+| **Acuity** | 7 days | ✅ Yes | ✅ Yes | No credit card needed |
+| **Koalendar** | 7 days | ✅ Yes | ✅ Yes | Free plan also available forever |
+| **Cal.com** | 3 days | ❌ No (Teams test) | ✅ Yes | Very short trial for paid features |
+| **YouCanBookMe** | 14 days | ✅ Yes | ✅ Yes | Free plan: 1 user, 1 calendar |
+| **Microsoft Bookings** | 30 days | ✅ Yes | ✅ Yes | Part of M365 Business 30-day trial |
+
+### Installable Demos
+- **Vagaro**: On-demand webinar demo + live walkthrough available on request
+- **Jobber**: Live demo scheduling + recorded walkthroughs
+- **Trafft**: Video demos + live demo scheduling
+- **HoneyBook**: Live demo scheduling + extensive video guides
+- **Setmore**: Live demo scheduling
+- **Calendly**: Interactive web demo (product tour)
+- **Acuity**: Video demos + live scheduling
+- **Koalendar**: Interactive product tour
+- **Cal.com**: Self-signup for testing
+- **SimplyBook**: Video demos + live demo
+- **Microsoft Bookings**: Part of M365 Business free trial
+
+---
 
 Based on verified findings, the following tools either do NOT or NO LONGER support native mobile phone calendar sync:
 
@@ -336,6 +400,8 @@ Based on verified findings, the following tools either do NOT or NO LONGER suppo
 | **HoneyBook** | ✅ Direct sync | ✅ Direct sync | ✅ 2-way | ⚠️ Unclear | ✅ Built-in | ✅ Yes | $39/mo |
 | **Setmore** | ⚠️ 1-way iCal | ⚠️ Via Google Calendar | ✅ 2-way | ✅ Native QB | ✅ Built-in | ✅ Yes | $12/mo |
 | **Calendly** | ❌ Discontinued | ⚠️ Via Google Calendar | ✅ 2-way | ⚠️ Zapier | ✅ Built-in | ✅ Yes | $8/mo |
+| **Koalendar** | ✅ 2-way (Pro) | ✅ 2-way (Pro) | ✅ 2-way (Pro) | ⚠️ Zapier | ✅ Built-in | ✅ Yes | Free |
+| **Cal.com** | ✅ 2-way | ✅ 2-way | ✅ 2-way | ⚠️ Zapier | ✅ Built-in | ✅ Yes | Free |
 
 ---
 
@@ -416,7 +482,30 @@ Under the batch billing workflow with QuickBooks Online confirmed, QB Desktop co
 
 ---
 
-## Open Questions for Shaun
+|---
+
+## Value Analysis at 30-Client Scale (~$30/month Budget)
+
+Enable the Disabled has ~$204K annual revenue (30 clients @ ~$17K/mo across trainers). At a $30/month tool budget, what do the viable candidates deliver?
+
+| Tool | Monthly Cost @ 3 Trainers | What You Get | QB Path | Verdict |
+|------|--------------------------|-------------|---------|---------|
+| **Trafft** | **$0 (Free plan)** | ✅ 5 users, unlimited appointments, native Apple/Google/Outlook sync, mobile apps, 14-day premium trial | ⚠️ Zapier | 🏆 **Best value** — free tier covers needs |
+| **Setmore** | **$15** (3 users @ $5/mo annual) | ✅ 4 users, 200 appointments, 2-way Google sync, 1-way iPhone sync, native QB | ✅ Native QB | ✅ **Strong value** — budget-friendly with QB native |
+| **Cal.com** | **$0 (Free)** for individuals | ✅ Individual scheduling, native calendar sync | ⚠️ Zapier | ⚠️ Free only for individuals — teams need paid |
+| **Koalendar** | **$0 (Free)** for 1 user | ✅ 2 calendar connections, free tier | ⚠️ Zapier | ✅ Free tier works for 1 trainer; upgrade for team |
+| **Vagaro** | **$72** (3 users @ $24/mo) | ✅ Fitness-specific, native mobile sync, classes, QB add-on | ⚠️ Paid add-on | ❌ **Over budget** at $72/month |
+| **Jobber** | **$270** (3 users @ $90/mo) | ✅ Native QB, broad calendar support, multi-trainer | ✅ Native | ❌ **Way over budget** — overkill |
+| **HoneyBook** | **$117** (3 users @ $39/mo) | ✅ All-in-one CRM, native mobile sync | ⚠️ Unclear | ❌ **Over budget** at $117/month |
+
+### Key Insight
+**Trafft's free plan (5 users, unlimited appointments) is the standout value.** It supports up to 5 team members (Shaun + 3 trainers + 1 admin) with full calendar sync and all core features at $0/month. QB integration is via Zapier (acceptable for batch billing).
+
+**Setmore Pro at $15/month** (3 users annually) is the second-best value — it's the most budget-friendly option with native QB Online export, though it only offers 1-way iPhone calendar sync.
+
+**Calendly at $24/month** (3 users) is affordable but **disqualified** — no native iOS Calendar support.
+
+---
 
 1. **Phone calendar preference:** Do Shaun, Sean, and Charlotte use the **native iOS Calendar app** on iPhones (or native Android Calendar on Android phones), or the **Google Calendar app**? 
    - If **native iOS/Android Calendar**: Calendly, SuperSaaS, SimplyBook are **disqualified**.
