@@ -5,6 +5,7 @@
 **Date:** September 10, 2026  
 **Status:** Draft — ready for Shaun to fill in  
 **Workflow:** Booking + native phone calendar → notifications → batch billing in QB  
+**QuickBooks Edition:** Online (QBO) — confirmed by user  
 
 ---
 
@@ -34,20 +35,11 @@ The model is designed to be **scored by you (Shaun)** once you've reviewed the [
 |---|----------|----------------|-----------------|
 | **R1** | Native Mobile Phone Calendar Sync | **35%** | Syncs appointments to iOS Calendar (iPhone), Android Calendar, or Google Calendar app on mobile |
 | **R2** | Booking + Notifications | **25%** | Client self-booking, automated notifications to client + trainer + admin |
-| **R3** | QB Integration Path | **10%** | QB Online or Desktop export/sync path (batch/middleware acceptable) |
+| **R3** | QB Integration Path | **10%** | QB Online export/sync path (batch/middleware acceptable) |
 | **R4** | Multi-Trainer Coordination | **15%** | Trainer assignments, substitutions, per-trainer calendar access |
-| **R5** | QB Integration Path | **10%** | QB Online or Desktop export/sync path (batch/middleware acceptable) |
+| **R5** | Client Self-Booking | **10%** | Public booking page with real-time availability |
 | **R6** | Fitness/Disability Fit | **5%** | Accessibility features, custom intake forms, health data compliance |
 | **R7** | Cost at Scale | **5%** | Monthly cost at 30–50 client scale |
-
-**Note:** R3 and R5 are the same category — please ignore the duplicate in the table above. Correct weights are:
-- R1 (Mobile Calendar): 35%
-- R2 (Booking/Notifications): 25%
-- R3 (QB Path): 10%
-- R4 (Multi-Trainer): 15%
-- R5 (Self-Booking): 10%
-- R6 (Fitness Fit): 5%
-- R7 (Cost): 5%
 
 ---
 
@@ -89,13 +81,13 @@ The model is designed to be **scored by you (Shaun)** once you've reviewed the [
 
 | Score | Meaning |
 |-------|---------|
-| 5 | Native QB Online or Desktop sync (automatic) |
+| 5 | Native QB Online sync (automatic) |
 | 4 | Native QB Online export (one-way, can be batched) |
 | 3 | QB via reliable middleware (Zapier/Make, well-tested) |
 | 2 | QB via middleware, but with known issues |
 | 1 | No QB integration path |
 
-**Sub-criteria (tie-breaker):** QB Desktop support, data synced (customers, invoices, payments), sync direction
+**Sub-criteria (tie-breaker):** Data synced (customers, invoices, payments), export frequency, sync direction
 
 ---
 
@@ -164,44 +156,46 @@ These answers determine weight adjustments and disqualifying criteria:
 - [ ] **Native Android Calendar app** — Must sync to Android Calendar natively.
 - [ ] **Google Calendar app on both iOS and Android** — Calendly, SuperSaaS, and SimplyBook become viable.
 
-### Q2: QuickBooks Edition
-- [ ] **QuickBooks Online (QBO)** — Supports most tools
-- [ ] **QuickBooks Desktop** — Rules out most appointment tools; need batch export path
-- [ ] **Not using QB yet** — R3 drops to 0%
-
-### Q3: Current Manual QB Re-entry
+### Q2: Current Manual QB Re-entry
 - [ ] **Yes, we re-key everything** — R3 increases to 15%
 - [ ] **No, we don't re-key** — R3 stays at 10%
 - [ ] **We don't use QB for billing yet** — R3 drops to 0%
 
-### Q4: Client Self-Booking Needed?
+### Q3: Client Self-Booking Needed?
 - [ ] **Yes, clients should self-book online** — R5 stays at 10%
 - [ ] **No, all booking goes through me** — R5 drops to 5%
 - [ ] **Hybrid** — R5 stays at 10%
 
-### Q5: Trainer Substitution Frequency
+### Q4: Trainer Substitution Frequency
 - [ ] **Frequent (weekly or more)** — R4 stays at 15%
 - [ ] **Occasional (monthly)** — R4 drops to 10%
 - [ ] **Rare (less than monthly)** — R4 drops to 5%
 
-### Q6: ADA/WCAG Accessibility Required?
+### Q5: ADA/WCAG Accessibility Required?
 - [ ] **Yes — booking page must be ADA-compliant** — R6 increases to 10%; disqualifies non-compliant tools
 - [ ] **No formal requirements, but want something in place** — R6 stays at 5%
 - [ ] **No requirements** — R6 stays at 5%
 
-### Q7: Current Weekly Scheduling Coordination Time?
+### Q6: Current Weekly Scheduling Coordination Time?
 - [ ] **5+ hours/week** — R2 increases to 30%; R4 increases to 20%
 - [ ] **2–5 hours/week** — Weights stay as default
 - [ ] **Under 2 hours/week** — R2 drops to 20%
+
+### Q7: Batch QB Billing Frequency?
+- [ ] **Weekly** — QB export needs to be fast/reliable (R3 weight +5%)
+- [ ] **Monthly** — QB export can be batch/manual (R3 stays at 10%)
+- [ ] **Per-campaign/event** — QB export needs to be event-triggered (R3 weight +5%)
 
 ---
 
 ## Candidate Tools to Score
 
-> **Disqualified based on Q1:**
-> - If Q1 = Native iOS Calendar: Calendly, SuperSaaS, SavvyCal, YouCanBookMe, SimplyBook
-> - If Q1 = Google Calendar app: Vagaro (staff sync is Google only), Jobber (via Google Calendar on Android)
-> - If Q2 = QB Desktop: Most appointment tools without batch export
+> **Disqualified based on Q1 (phone calendar preference):**
+> - If Q1 = Native iOS Calendar: Calendly, SuperSaaS, SavvyCal, YouCanBookMe, SimplyBook are DISQUALIFIED (no native iOS Calendar sync)
+> - If Q1 = Native Android Calendar: Calendly, SuperSaaS, SavvyCal, YouCanBookMe, SimplyBook are DISQUALIFIED (sync is via Google Calendar app, not native Android Calendar)
+> - If Q1 = Google Calendar app: All tools are eligible (Calendly, SuperSaaS, etc. work if Google Calendar app is used on phone)
+>
+> **No QB Desktop disqualification** — QuickBooks Online confirmed. All tools supporting QBO export are eligible.
 
 ### Tier 1 Candidates (Native Mobile Calendar Support)
 
@@ -261,7 +255,7 @@ Selected QB Export Path:
 ## Next Steps
 
 1. **Answer Questions Q1–Q7** above
-2. **Eliminate disqualified tools** based on Q1 and Q2 answers
+2. **Eliminate disqualified tools** based on Q1 answer
 3. **Sign up for free trials** of remaining Tier 1 candidates
 4. **Test mobile calendar sync** on actual iOS/Android device(s) used by the team
 5. **Score each tool** using the tables above

@@ -4,6 +4,7 @@
 **Date: September 10, 2026**  
 **Status: Complete — research phase**  
 **Workflow Context:** Booking + mobile phone calendar recording → batch billing in QB  
+**QuickBooks Edition:** Online (QBO) — confirmed by user  
 
 ---
 
@@ -355,8 +356,8 @@ Jobber supports subscription-based 1-way sync to Apple/iPhone Calendar, Android 
 ### 4. Trafft Is the Surprise — Free Plan with Native Apple Calendar
 Trafft offers two-way sync with iCal (Apple Calendar), Google, and Outlook, including a free plan for teams up to 5. The Apple Calendar sync requires 2FA and an App-Specific Password.
 
-### 5. QB Integration Remains Secondary
-Under the batch billing workflow, QB integration drops to a convenience layer. All recommended tools can export appointment data either natively (Jobber, Setmore) or via middleware (Zapier for Trafft, Vagaro).
+### 5. QB Desktop Support Is Not a Concern (QBO Confirmed)
+Under the batch billing workflow with QuickBooks Online confirmed, QB Desktop compatibility is not a limiting factor. All recommended tools support QBO export, either natively (Jobber, Setmore) or via middleware (Zapier for Trafft, Vagaro add-on).
 
 ---
 
@@ -421,7 +422,7 @@ Under the batch billing workflow, QB integration drops to a convenience layer. A
    - If **native iOS/Android Calendar**: Calendly, SuperSaaS, SimplyBook are **disqualified**.
    - If **Google Calendar app**: Calendly becomes viable.
 
-2. **QB edition:** QuickBooks Online or Desktop? (Most tools are QBO-only.)
+2. **QB edition:** ✅ QuickBooks Online (QBO) — confirmed. All tools supporting QBO export are eligible.
 
 3. **Current manual coordination time:** How much time is spent on scheduling coordination weekly? (Hours per week)
 
