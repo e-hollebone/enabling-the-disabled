@@ -3,19 +3,21 @@
 **Prepared by: Eric Hollebone / Hermes Agent**  
 **Date: September 10, 2026**  
 **Status: Complete — research phase**  
-**Workflow Context:** Booking + Google Workspace recording → batch billing in QB (no real-time QB sync required)  
+**Workflow Context:** Booking + mobile phone calendar recording → batch billing in QB  
 
 ---
 
 ## Executive Summary
 
-This document compiles research on calendar and appointment scheduling solutions suitable for small-to-medium businesses. Given the **refined requirement** — appointments recorded in Google Workspace, then batch-billed in QuickBooks via "draw down or invoicing on accounts" — the **QuickBooks real-time sync requirement is DOWNGRADED** from critical to optional. The primary requirement is now:
+This document compiles research on calendar and appointment scheduling solutions suitable for small-to-medium businesses. Given the **refined requirement** — appointments recorded on **native mobile phone calendars** (iOS Calendar, Android Calendar), then batch-billed in QuickBooks via "draw down or invoicing on accounts" — the **QuickBooks real-time sync requirement is DOWNGRADED** to optional/secondary. The primary requirements are:
 
-1. **Appointment booking** with notifications to all parties (client, trainer, Shaun)
-2. **Native Google Calendar / Workspace integration** (two-way sync, inventory consumption)
+1. **Native mobile phone calendar integration** (iOS Calendar, Android Calendar, not just Google Calendar)
+2. **Appointment booking** with notifications to all parties (client, trainer, Shaun)
 3. **QB integration** as a secondary convenience (batch export or manual)
 
-The standout observation: **the QuickBooks synchronization requirement is no longer the gating factor**. Tools with excellent Google Workspace integration and client self-booking now become viable even if QB sync is via middleware or batch export.
+**Critical finding:** **Google Calendar ≠ mobile phone calendar.** Many tools sync to Google Calendar but do NOT sync to the native iOS Calendar or Android Calendar apps on phones. This disqualifies several otherwise-strong candidates.
+
+> **Note:** Google Calendar sync IS sufficient if Shaun, Sean, and Charlotte all use Google Calendar on their phones (iOS Google Calendar app or Android). But if they use the **native iOS Calendar app** or **native Android Calendar app**, a separate Google Calendar account is required.
 
 ---
 
@@ -23,348 +25,425 @@ The standout observation: **the QuickBooks synchronization requirement is no lon
 
 | Priority | Requirement | Weight Impact |
 |----------|-------------|---------------|
-| **P1** | Native Google Calendar / Workspace two-way sync | R2 weight: 30% |
-| **P1** | Appointment booking with notifications to all parties | R1 weight: 25% |
-| **P2** | Client self-booking portal | R5 weight: 15% |
+| **P1** | Native mobile phone calendar sync (iOS Calendar, Android Calendar, or Google Calendar app on mobile) | R1 weight: 35% |
+| **P1** | Appointment booking with notifications to all parties | R2 weight: 25% |
+| **P2** | Client self-booking portal | R5 weight: 10% |
 | **P2** | Multi-trainer coordination + substitution | R4 weight: 15% |
-| **P3** | QB integration (batch/middleware acceptable) | R1 weight: 10% |
-| **P3** | Fitness/disability-specific features | R3 weight: 5% |
-| **P3** | Cost at scale | R6 weight: 5% |
+| **P3** | QB integration (batch/middleware acceptable) | R3 weight: 10% |
+| **P3** | Fitness/disability-specific features | R6 weight: 5% |
+| **P3** | Cost at scale | R7 weight: 5% |
 
 ---
 
 ## Research Sources
 
-All findings below are grounded in the following sources (verified at time of research):
-
 | Source | URL | Scope |
 |--------|-----|-------|
 | G2: Scheduling Software that Integrates with QuickBooks | `learn.g2.com/scheduling-software-that-integrates-with-quickbooks` | 11 tools, QB + appointment focus |
 | Shopify: Fitness Studio Scheduling | `www.shopify.com/blog/fitness-studio-scheduling-software` | 11 fitness-specific apps |
-| Ruby: 20 Integrable Scheduling Tools | `www.ruby.com/blog/20-of-the-best-small-business-appointment-scheduling-tools-and-apps/` | 20 general SMB tools |
-| Zapier: Appointment Scheduling Apps | `zapier.com/blog/best-appointment-scheduling-apps/` | 5 top tools, QB via Zapier |
-| Integrately: Google Calendar + QB | `integrately.com/integrations/google-calendar/quickbooks-online` | Middleware for both |
-| Calendly: Google Integration | `calendly.com/integration/google` | Google Workspace deep integration |
-| Setmore: QuickBooks Integration | `www.setmore.com/integrations/quickbooks` | QB-native, Google native |
-| Vagaro: Google Calendar Sync | `www.vagaro.com/pro/updates/google-sync` | Fitness-specific, Google native |
+| Calendly Help: Connect Calendar | `calendly.com/help/connect-your-calendar-to-calendly` | Supported calendars list |
+| Calendly Help: iCloud Overview | `calendly.com/help/icloud-overview` | iCloud/Apple Calendar discontinued |
+| WpAmelia: Calendly Apple Calendar Alternative | `wpamelia.com/calendly-apple-calendar-alternative/` | Confirms Calendly Apple Calendar deprecation |
+| Vagaro Support: Add Appointment to Calendar | `support.vagaro.com/hc/articles/360021411314` | Mobile calendar sync for iOS/Android |
+| Vagaro Support: Sync with Google Calendar | `support.vagaro.com/hc/articles/31275501148699` | Google Calendar only |
+| Setmore Support: iPhone Calendar Sync | `support.setmore.com/en/articles/490972` | 1-way iPhone calendar sync |
+| Jobber Help: Calendar Syncing | `help.getjobber.com/en/articles/calendar-syncing` | Syncs to Apple/iPhone + Google |
+| SuperSaaS: Mobile Device Use | `supersaas.com/info/doc/daily_use/mobile_device` | iOS/Android home screen shortcut |
+| Trafft: Apple Calendar Sync | `traft.com/docs/integrations/apple-calendar-synchronization` | Two-way iCal sync |
+| HoneyBook Help: Sync Mobile Calendar | `help.honeybook.com/en/articles/2673859` | Direct iOS/Android calendar sync |
+| Microsoft Bookings | `microsoft.com/en-us/microsoft-365/business/scheduling-and-booking-app` | Syncs to iPhone Apple Calendar |
+| SimplyBook Calendar Sync | `simplybook.me/en/calsync-fixedstart` | 2-way Google/Outlook only |
 
 ---
 
-## Tier 1: Native Google Calendar + Strong Booking (Primary Focus)
+## Tool-by-Tool Mobile Calendar Sync Capabilities
 
-These tools excel at Google Workspace integration and appointment booking with notifications — the primary requirements now.
-
-### 1. Calendly — Best Google Workspace Integration
+### 1. Calendly — ⚠️ Apple Calendar NOT Supported
 
 **Category:** Meeting/appointment scheduling  
-**Google Calendar:** Native two-way sync (up to 6 calendars)  
+**Mobile Calendar Sync:** ❌ No Apple/iCloud Calendar support (discontinued Aug 20, 2024)  
+**Supported Calendars:** Google Calendar, Office 365/Outlook.com, Exchange only  
 **QB Integration:** Via Zapier (optional)  
 **Pricing:** Free tier; Pro $8–$12/user/month  
-**G2 Rating:** 4.7★ (Leaders category, 8.7/10 ease of use)  
+**G2 Rating:** 4.7★ (Leaders category)  
 
 **Key Strengths:**
-- **Best-in-class Google Calendar integration** — syncs across multiple calendars, prevents double-booking
-- **Google Workspace deep integration** — Gmail extension, Google Meet links, Chrome extension
-- **Automated notifications** — email and SMS confirmations, reminders, follow-ups via Workflows
-- **Client self-booking** — branded booking pages, real-time availability
-- **Google Meet integration** — auto-generates video meeting links
-- **Simple, clean UI** — 9.4/10 on G2 ease-of-use scale
+- Best-in-class Google Calendar integration (if users have Google Calendar on their phones)
+- Automated notifications — email and SMS confirmations, reminders, follow-ups
+- Client self-booking with real-time availability
+- Simple, clean UI (9.4/10 G2 ease-of-use)
 
 **Key Weaknesses:**
-- **No native QB integration** — requires Zapier ($20–$100/mo)
-- **Limited client database** — not a CRM
-- **Payment processing** only on Pro/Business tiers (via Stripe)
-- **No trainer substitution/management features**
+- **NO Apple/iCloud Calendar support** — confirmed discontinued as of August 20, 2024
+- **NO iPhone native iOS Calendar app sync** — only via Google Calendar app
+- Limited client database (not a CRM)
+- Payment processing only on Pro/Business tiers
 
-**Google Workspace Integration Details:**
-- Two-way sync with primary + 5 additional Google Calendars
-- Gmail extension for one-click time slot offers
-- Google Meet video conferencing integration
-- Chrome extension for scheduling from any webpage
-- Booking page embeds via Google Sites integration
-
-**QB Integration Path (if needed later):**
-- Zapier automation: New Calendly booking → Create Google Calendar event → Export to QB via Integrately/Zapier
-- Or: End of month → Export Google Calendar events → Import to QB as invoices
-
-**Fit for Enable the Disabled (Refined Workflow):**
-- ✅ **Native Google Calendar two-way sync** (primary requirement)
-- ✅ **Notifications to all parties** (email/SMS automations)
-- ✅ **Client self-booking** reduces manual coordination
-- ✅ **Inventory consumption** via calendar blocking (each booking occupies a time slot)
-- ⚠️ QB via middleware (acceptable under new workflow — QB is batch-processed, not real-time)
-- ❌ No fitness-specific features or accessibility compliance
-
----
-
-### 2. SuperSaaS — Best Budget Fitness-Friendly Option
-
-**Category:** General scheduling (fitness-friendly)  
-**Google Calendar:** Native two-way sync  
-**QB Integration:** Via Zapier only  
-**Pricing:** From $9/month (no per-seat fees)  
-**G2 Rating:** 4.6★ (82 reviews)  
-
-**Key Strengths:**
-- **Very affordable** — starting at $9/month
-- **No per-seat fees** — all features included at paid tiers
-- **Native Google Calendar sync** — two-way
-- **Custom intake forms** — can collect accessibility needs, emergency contacts, special instructions
-- **Waiting list functionality** — useful for popular slots
-- **Credit system** — clients buy credits to book sessions
-- **Works for fitness classes + personal training**
-
-**Key Weaknesses:**
-- QB via Zapier only (acceptable under refined workflow)
-- Interface looks dated (not modern UI)
-- Not fitness-specific (general purpose)
-
-**Google Calendar Integration:** Two-way sync with Google Calendar
-
-**QB Integration Path:** Zapier automation for batch export of appointments → QB invoices
+**Calendly Calendar Sync Details (from help.calendly.com):**
+- Supported calendars: Google Calendar, Office 365/Outlook.com, Exchange
+- "As of August 20, 2024, Calendly no longer supports new connections to iCloud Calendar"
+- Existing iCloud connections may continue but are not guaranteed
+- Calendly mobile app for iOS and Android does NOT sync to native phone calendar
 
 **Fit for Enable the Disabled:**
-- ✅ **Native Google Calendar sync**
-- ✅ **Affordable at scale** ($9–$49/month regardless of client count)
-- ✅ **Custom fields** for accessibility needs, emergency contacts
-- ✅ **Waiting lists** for popular time slots
-- ⚠️ QB via middleware (acceptable)
-- ⚠️ Interface is dated but functional
+- ⚠️ **Only if trainers use Google Calendar app on their phones** (not native iOS Calendar)
+- ❌ Disqualified if trainers use native iOS Calendar or Android Calendar app without Google Calendar
+- ✅ Automated notifications to all parties
+- ✅ Client self-booking
+- ✅ $8/month (budget-friendly)
+- ⚠️ QB via middleware (acceptable — batch billing workflow)
 
 ---
 
-### 3. Setmore — Native QB + Google, Affordable
-
-**Category:** Appointment scheduling (SMB general)  
-**Google Calendar:** Native two-way sync  
-**QB Integration:** Native QB Online (one-way, add-on)  
-**Pricing:** Free tier; Pro $12/month  
-
-**Key Strengths:**
-- **Native Google Calendar two-way sync**
-- **Native QuickBooks Online integration** (one-way export)
-- **Free tier** with basic features
-- **Built-in payment processing** (credit/debit, cash)
-- **Auto digital receipts** for bookings
-- **Mobile apps** for iOS/Android
-
-**Key Weaknesses:**
-- QB sync is one-way (Setmore → QB)
-- QB data does NOT flow back to Setmore
-- Limited customization of booking page
-
-**Google Workspace Integration:** Native two-way Google Calendar sync, booking page widgets
-
-**QB Integration Path:** Native one-way export of appointment/payment data to QB
-
-**Fit for Enable the Disabled:**
-- ✅ **Native Google Calendar sync** (primary requirement)
-- ✅ **Native QB Online export** (bonus, not critical)
-- ✅ **Payment processing** for session fees
-- ✅ **Affordable** ($12/month)
-- ✅ **Auto receipts** — reduces manual follow-up
-- ⚠️ QB Desktop not supported
-- ⚠️ No fitness-specific features
-
----
-
-### 4. Vagaro — Best Fitness-Specific with Google Sync
+### 2. Vagaro — ✅ Mobile Calendar Sync via App
 
 **Category:** Fitness, salon, spa business management  
-**Google Calendar:** Native two-way sync (enhanced Dec 2024)  
+**Mobile Calendar Sync:** ✅ iOS/Android native calendar (via Vagaro mobile app)  
+**Google Calendar Sync:** ✅ Two-way (only calendar supported for staff sync)  
 **QB Integration:** Premium add-on (QB Online only)  
 **Pricing:** $23.99–$83.99/month + QB add-on fee  
 **G2 Rating:** 4.6★ (98.8% small business reviewers)  
 
 **Key Strengths:**
-- **Built for fitness studios** — class scheduling, personal training
-- **Native two-way Google Calendar sync** — appointments, classes, personal tasks
-- **HIPAA and EMR compliant** — relevant for health data
-- **Consumer app** — 5M+ users can discover your business
-- **Built-in POS and payment processing**
+- Built for fitness studios — class scheduling, personal training
+- **Mobile app syncs appointments to device's default calendar on iOS and Android**
+- HIPAA and EMR compliant (health data)
+- Consumer app (5M+ users can discover business)
+- Built-in POS and payment processing
 
-**Key Weaknesses:**
-- QB integration is paid add-on (mixed reviews)
-- Pricier than general-purpose tools ($24+/month base)
-- QB sync described as "a management nightmare" by some users
-- Daily export (not real-time)
+**Mobile Calendar Sync Details (from support.vagaro.com):**
+- "The Vagaro app will then open the default calendar app on your mobile device"
+- iOS: Choose "Allow Full Access" (sync two-way) or "Keep Add Only" (one-way import)
+- Android: Grant Vagaro App access to calendar
+- Staff calendar sync: Only Google Calendar supported (per support docs)
+- **Client appointments sync to native phone calendar** (iOS Calendar app / Android Calendar app)
 
-**Google Workspace Integration:** Native two-way sync across appointments, classes, personal tasks per staff member
-
-**QB Integration Path:** Premium add-on, daily export to QB Online
+**QB Integration:** Premium add-on for QB Online, daily export (mixed user reviews)
 
 **Fit for Enable the Disabled:**
-- ✅ **Fitness-specific** (classes, personal training, equipment booking)
-- ✅ **Native Google Calendar sync** (primary requirement)
-- ✅ **HIPAA/EMR compliance** (relevant for disability clients' health data)
-- ⚠️ QB add-on costs extra and has mixed reviews
+- ✅ **Syncs appointments to native iOS/Android calendar via mobile app**
+- ✅ Fitness-specific (classes, personal training)
+- ✅ HIPAA/EMR compliance
+- ⚠️ QB add-on costs extra and has mixed reviews (acceptable — batch workflow)
 - ❌ Pricier ($24+/month)
-- ⚠️ May be overkill for 30-client scale
+- ⚠️ Staff Google Calendar sync is the only staff-level calendar sync option
 
 ---
 
-## Tier 2: Google-First Tools with Middleware QB Path
+### 3. Jobber — ✅ iPhone Calendar via iCal URL
 
-### 5. SavvyCal — Calendly Alternative
-
-**Category:** Meeting scheduling  
-**Google Calendar:** Native (Google, Exchange, iCloud)  
-**QB Integration:** Via Zapier only  
-**Pricing:** $12–$20/user/month  
+**Category:** Field service management  
+**Mobile Calendar Sync:** ✅ Apple/iPhone Calendar, Android Calendar, Google Calendar  
+**QB Integration:** Native QB Online (one-way export)  
+**Pricing:** From $90/month (higher-tier plans)  
+**G2 Rating:** 4.6★ (Summer 2026 Grid)  
 
 **Key Strengths:**
-- Checks conflicts across multiple calendars
-- Better UX than Calendly for some users
-- Native Google, Exchange, and iCloud sync
+- **Syncs to Apple/iPhone Calendar via iCal URL subscription**
+- Also syncs to Google Calendar, Android Calendar, Outlook, Yahoo, Thunderbird
+- One-way sync from Jobber into calendar app (appointments show up, can't edit back)
+- Pulls data 2 weeks back, 20 weeks forward
+- QB Online integration (Connect plan and up)
+- Designed for teams with multiple staff
+
+**Mobile Calendar Sync Details (from help.getjobber.com):**
+- "The calendar sync is one-way from Jobber into your calendar app"
+- Explicitly lists: Google calendar, Apple iCal (iPhone/iPad calendar), iCloud calendar, Yahoo calendar, Microsoft Outlook
+- iOS users: Subscribes via iCal URL in iPhone Settings > Calendar > Accounts > Subscribed
+- Android users: Can import via Google Calendar web interface (Google Calendar app on phone)
+
+**QB Integration:** Native QB Online sync (one-way Jobber → QB) — clients, invoices, payments, timesheets
+
+**Fit for Enable the Disabled:**
+- ✅ **Syncs to iPhone Calendar AND Android Calendar AND Google Calendar**
+- ✅ Multi-trainer support (built for teams)
+- ⚠️ QB is native but one-way (acceptable for batch workflow)
+- ❌ Overkill/pricy for 30-client scale ($90+/month)
+- ⚠️ Field service focus, not fitness-specific
+
+---
+
+### 4. Trafft — ✅ Native Apple Calendar Sync
+
+**Category:** Appointment scheduling (service businesses)  
+**Mobile Calendar Sync:** ✅ Two-way sync with Google, Outlook, AND **iCal (Apple Calendar)**  
+**QB Integration:** Not directly mentioned; likely via Zapier  
+**Pricing:** Free plan for teams up to 5; paid plans scale  
+**G2/Reviews:** Rating 4.9 (808 reviews)  
+
+**Key Strengths:**
+- **Two-way sync with Apple/iCal Calendar** — explicitly documented
+- Two-way sync with Google Calendar and Outlook
+- Free plan available for small teams
+- WordPress plugin available (can embed booking on any site)
+- Mobile app for iOS and Android
+
+**Apple Calendar Sync Details (from trafft.com/docs):**
+- "Before connecting Apple Calendar in Trafft, your Apple account needs to have 2FA configured and an App-Specific Password created"
+- Supports Apple Calendar synchronization natively (not via Google Calendar workaround)
+- Two-way sync means changes in either calendar reflect in both
+
+**QB Integration:** Not explicitly documented; likely via Zapier middleware
+
+**Fit for Enable the Disabled:**
+- ✅ **Native Apple Calendar two-way sync**
+- ✅ Free plan available (low risk to test)
+- ✅ WordPress plugin (can add to website)
+- ⚠️ QB via middleware (acceptable)
+- ⚠️ Not fitness-specific
+
+---
+
+### 5. HoneyBook — ✅ Direct iOS/Android Calendar Sync
+
+**Category:** Creative business CRM + scheduling  
+**Mobile Calendar Sync:** ✅ Direct iOS (iCal) and Android calendar sync from mobile app  
+**Google Calendar Sync:** ✅ Also supports Google, Apple, Outlook calendar sync  
+**QB Integration:** QB integration documented but details unclear  
+**Pricing:** $39–$79/month  
+**G2 Rating:** 4.6★  
+
+**Key Strengths:**
+- **HoneyBook's iOS and Android apps** "directly retrieve events from your iOS (iCal) or Android calendar"
+- Connects Google, Apple, or Outlook calendar to HoneyBook
+- All-in-one: contracts, invoices, payments, project tracking
+- Mobile app syncs directly with native phone calendar
+
+**Mobile Calendar Sync Details (from help.honeybook.com):**
+- "Allow the app to directly retrieve events from your iOS (iCal) or Android calendar"
+- Can sync personal calendar with HoneyBook
+- Works with iOS native Calendar app directly
+
+**QB Integration:** QB integration exists but documentation is sparse (likely via middleware)
+
+**Fit for Enable the Disabled:**
+- ✅ **Direct iOS Calendar and Android Calendar sync**
+- ✅ Native phone calendar integration from mobile app
+- ✅ All-in-one (contracts, invoices, payments)
+- ⚠️ QB integration details unclear
+- ❌ Not fitness-specific
+- ❌ Higher price tier ($39+/month)
+
+---
+
+### 6. Microsoft Bookings — ✅ iPhone Calendar Sync
+
+**Category:** Microsoft 365 integrated scheduling  
+**Mobile Calendar Sync:** ✅ Syncs to iPhone's Apple Calendar (via Outlook integration)  
+**Google Calendar Sync:** Limited  
+**QB Integration:** Not native; via third-party connectors  
+**Pricing:** Included with Microsoft 365 Business  
+
+**Key Strengths:**
+- **Bookings meetings sync with iPhone's Apple Calendar** (confirmed in Microsoft Q&A)
+- Part of Microsoft 365 ecosystem
+- Free with M365 Business subscription
 
 **Key Weaknesses:**
-- QB requires Zapier
-- No client management features
-- Not fitness-specific
+- **Microsoft Bookings mobile apps discontinued** as of Dec 1, 2022 (Apple App Store and Google Play)
+- Limited Google Calendar support
+- QB integration not native
+
+**Mobile Calendar Sync Details:**
+- "These Bookings meetings show up on my online Outlook calendar and on my iPhone's Apple Calendar"
+- Requires Outlook calendar configuration on iOS device
 
 **Fit for Enable the Disabled:**
-- ✅ Excellent Google Calendar integration
-- ⚠️ QB via middleware (acceptable under refined workflow)
-- ❌ No client database or special needs tracking
+- ⚠️ Syncs to iPhone Apple Calendar (if using Outlook on phone)
+- ❌ Mobile apps discontinued (Dec 2022)
+- ❌ QB not native
+- ⚠️ Only useful if already in Microsoft 365 ecosystem
 
 ---
 
-### 6. YouCanBookMe — Budget Google Sync
+### 7. Setmore — ⚠️ 1-Way iPhone Sync Only
 
-**Category:** Appointment scheduling  
-**Google Calendar:** Native (Google, Office 365, iCloud, CalDAV)  
+**Category:** Appointment scheduling (SMB general)  
+**Mobile Calendar Sync:** ⚠️ 1-way iPhone calendar sync via URL subscription  
+**Google Calendar Sync:** ✅ Two-way sync  
+**QB Integration:** Native QB Online (one-way)  
+**Pricing:** Free tier; Pro $12/month  
+
+**Key Weaknesses:**
+- iPhone calendar sync is **1-way only** (appointments show in iPhone Calendar, but can't edit back)
+- Uses iCal URL subscription method (not native app integration)
+
+**Mobile Calendar Sync Details (from support.setmore.com):**
+- "Export appointments from Setmore to your iPhone calendar"
+- 1-way sync: "you can't make any changes to Setmore appointments from your iPhone calendar"
+- Works via Settings > Calendar > Accounts > Subscribed (paste Setmore iCal URL)
+
+**Fit for Enable the Disabled:**
+- ⚠️ iPhone Calendar sync (1-way, via URL subscription)
+- ✅ QB Online native export
+- ✅ Payment processing
+- ⚠️ Android sync less clear (likely via Google Calendar app)
+- ❌ 1-way sync only (can't edit appointments from phone calendar)
+
+---
+
+### 8. SuperSaaS — ⚠️ No Native Phone Calendar Sync
+
+**Category:** General scheduling (fitness-friendly)  
+**Mobile Calendar Sync:** ⚠️ No native phone calendar sync; iOS/Android via home screen shortcut  
+**Google Calendar Sync:** ✅ Two-way sync  
 **QB Integration:** Via Zapier only  
-**Pricing:** Free tier; Pro $10/month  
+**Pricing:** From $9/month  
+
+**Key Weaknesses:**
+- **No native iOS Calendar or Android Calendar sync**
+- Mobile access is via web app shortcut on home screen (not native calendar)
+- QB via middleware
+
+**Mobile Access Details (from supersaas.com):**
+- "Add your schedule to your iPhone or iPad home screen" (web app shortcut, not calendar sync)
+- "Add your schedule to your Android home screen"
+- Syncs to Google Calendar and Microsoft (not Apple native calendar)
 
 **Fit for Enable the Disabled:**
-- ⚠️ Google Calendar excellent
-- ⚠️ QB via middleware (acceptable)
-- ⚠️ Limited fitness features
+- ❌ **No native iOS/Android phone calendar sync**
+- ✅ Google Calendar two-way sync (if using Google Calendar app)
+- ✅ Affordable ($9/month)
+- ✅ Custom intake forms (accessibility needs)
+- ⚠️ QB via middleware
+- ⚠️ Interface is dated
 
 ---
 
-## Middleware Options for QB Integration
+## Disqualified Tools (No Native Mobile Calendar Sync)
 
-Since the refined workflow treats QB as **batch-processed** (not real-time), these middleware tools handle the "appointments → QB invoices" handoff:
+Based on verified findings, the following tools either do NOT or NO LONGER support native mobile phone calendar sync:
 
-| Tool | Description | QB Integration | Google Calendar Triggers | Cost |
-|------|-------------|---------------|-------------------------|------|
-| **Zapier** | 5,000+ app automation platform | Create invoices, payments, customers from scheduling data | New/updated/cancelled events | $20–$100/mo |
-| **Integrately** | AI-powered one-click automations | Create invoices, estimates, customers | New/updated/cancelled events | $20–$100/mo |
-| **Make (Integromat)** | Visual automation platform | Full QB data sync | Calendar event triggers | $9–$99/mo |
-
-**Workflow path:** Google Calendar events (completed appointments) → Zapier/Make → QB Online invoices (batch monthly)
+| Tool | Why Disqualified |
+|------|-----------------|
+| **Calendly** | Apple/iCloud Calendar support discontinued Aug 2024; only Google/Outlook/Exchange |
+| **Microsoft Bookings** | Mobile apps discontinued Dec 2022; sync requires Outlook on phone |
+| **SuperSaaS** | No native phone calendar sync; only home screen web shortcut + Google Calendar |
+| **SavvyCal** | Syncs to Google/Outlook, not Apple native calendar |
+| **YouCanBookMe** | Syncs to Google/Outlook/iCloud via Google, not native Apple/Android calendar |
+| **SimplyBook** | 2-way sync with Google/Outlook only, not Apple native calendar |
 
 ---
 
 ## Comparison Matrix (Refined)
 
-| Tool | Google Calendar | QB Path | Fitness-Specific | Notifications | Client Self-Book | Starting Price |
-|------|----------------|---------|------------------|---------------|-----------------|----------------|
-| **Calendly** | ✅ Native 2-way | ⚠️ Zapier | ❌ General | ✅ Built-in | ✅ Yes | $8/mo |
-| **SuperSaaS** | ✅ Native 2-way | ⚠️ Zapier | ⚠️ Fitness-friendly | ✅ Email/SMS | ✅ Yes | $9/mo |
-| **Setmore** | ✅ Native 2-way | ✅ Native QB | ❌ General | ✅ Built-in | ✅ Yes | $12/mo |
-| **Vagaro** | ✅ Native 2-way | ⚠️ Add-on | ✅ Fitness | ✅ Built-in | ✅ Yes | $24/mo |
-| **SavvyCal** | ✅ Native 2-way | ⚠️ Zapier | ❌ General | ✅ Built-in | ✅ Yes | $12/mo |
-| **YouCanBookMe** | ✅ Native 2-way | ⚠️ Zapier | ❌ General | ✅ Email | ✅ Yes | $10/mo |
+| Tool | iOS Calendar | Android Calendar | Google Calendar | QB Path | Notifications | Self-Book | Starting Price |
+|------|-------------|-----------------|-----------------|---------|---------------|-----------|----------------|
+| **Jobber** | ✅ 1-way iCal | ✅ 1-way via Google Calendar | ✅ 2-way | ✅ Native QB | ✅ Built-in | ✅ Yes | $90/mo |
+| **Vagaro** | ✅ Via mobile app | ✅ Via mobile app | ✅ 2-way | ⚠️ Add-on | ✅ Built-in | ✅ Yes | $24/mo |
+| **Trafft** | ✅ 2-way native | ✅ 2-way native | ✅ 2-way | ⚠️ Zapier | ✅ Built-in | ✅ Yes | Free |
+| **HoneyBook** | ✅ Direct sync | ✅ Direct sync | ✅ 2-way | ⚠️ Unclear | ✅ Built-in | ✅ Yes | $39/mo |
+| **Setmore** | ⚠️ 1-way iCal | ⚠️ Via Google Calendar | ✅ 2-way | ✅ Native QB | ✅ Built-in | ✅ Yes | $12/mo |
+| **Calendly** | ❌ Discontinued | ⚠️ Via Google Calendar | ✅ 2-way | ⚠️ Zapier | ✅ Built-in | ✅ Yes | $8/mo |
 
 ---
 
 ## Key Findings (Refined)
 
-### 1. QB Real-Time Sync Is No Longer the Gating Factor
-With the refined workflow (Google Workspace recording → batch QB billing), the QB integration requirement drops to secondary. This opens up 4 additional viable tools that were previously deprioritized due to QB-via-middleware.
+### 1. Calendly's Apple Calendar Deprecation Is a Dealbreaker
+As of August 20, 2024, Calendly no longer supports new connections to iCloud Calendar. This means:
+- iPhone users on native iOS Calendar app: **NO SYNC**
+- Only works if users have the Google Calendar app on their iPhone
+- Calendly mobile apps for iOS/Android do NOT integrate with native phone calendars
 
-### 2. Calendly Has the Best Google Workspace Integration
-Calendly's Google integration is the most mature in the market:
-- Native two-way sync across up to 6 calendars
-- Gmail extension for one-click scheduling
-- Google Meet integration
-- Chrome extension for scheduling from any webpage
-- Workflows for automated email/SMS notifications
+### 2. Vagaro Is the Only Fitness Tool with Native Mobile Calendar Sync
+Vagaro's mobile app can sync appointments to each trainer's device's default calendar app (iOS Calendar on iPhone, Google Calendar on Android). However, staff-level calendar sync for business owners only supports Google Calendar.
 
-### 3. Vagaro Is the Only Fitness-Specific Tool with Native Google Sync
-Vagaro's Dec 2024 Google Calendar sync enhancement makes it the strongest fitness-specific option — it syncs appointments, classes, and personal tasks two-way with each staff member's Google Calendar.
+### 3. Jobber Has the Broadest Mobile Calendar Support
+Jobber supports subscription-based 1-way sync to Apple/iPhone Calendar, Android Calendar (via Google Calendar), Google Calendar, Outlook, Yahoo, and Thunderbird via iCal URL subscription. This covers the most platforms.
 
-### 4. SuperSaaS Offers Best Value for Fitness-Friendly Booking
-At $9/month with no per-seat fees, SuperSaaS is the most affordable option that supports fitness classes, personal training, custom intake forms (for accessibility needs), and native Google Calendar sync.
+### 4. Trafft Is the Surprise — Free Plan with Native Apple Calendar
+Trafft offers two-way sync with iCal (Apple Calendar), Google, and Outlook, including a free plan for teams up to 5. The Apple Calendar sync requires 2FA and an App-Specific Password.
 
-### 5. QB Desktop Compatibility Remains a Concern
-If the business uses QuickBooks Desktop (not Online), most tools will require middleware or batch export for QB integration. QB Desktop is being deprecated by Intuit in favor of QBO.
+### 5. QB Integration Remains Secondary
+Under the batch billing workflow, QB integration drops to a convenience layer. All recommended tools can export appointment data either natively (Jobber, Setmore) or via middleware (Zapier for Trafft, Vagaro).
 
 ---
 
 ## Recommendations (Refined)
 
-### Shortlist (Test in Order)
+### Tier 1: Native Mobile Calendar Sync + Fitness Features
 
-1. **Calendly (Pro)** — Best overall Google Workspace integration + client self-booking
-   - ✅ Best Google Calendar integration in the market
-   - ✅ Automated notifications to all parties
-   - ✅ Client self-booking reduces coordination burden
-   - ✅ Simple, proven UI
-   - ✅ $8/month (budget-friendly)
-   - ⚠️ QB via Zapier (acceptable — batch billing workflow)
-   - ⚠️ 14-day Pro trial
-
-2. **Vagaro** — Best fitness-specific tool with native Google sync
+1. **Vagaro** — Best fitness-specific with native mobile calendar sync
+   - ✅ Mobile app syncs to iPhone and Android native calendar
    - ✅ Fitness-specific (classes, PT, equipment booking)
-   - ✅ Native Google Calendar two-way sync
-   - ✅ HIPAA/EMR compliance for health data
+   - ✅ HIPAA/EMR compliant
    - ✅ Consumer app discovery (5M+ users)
-   - ⚠️ $24+/month + QB add-on
-   - ⚠️ QB add-on has mixed reviews (acceptable — batch workflow)
-   - 30-day free trial
+   - ⚠️ QB add-on is paid + mixed reviews
+   - ⚠️ Staff calendar sync is Google Calendar only
+   - $24+/month, 30-day free trial
 
-3. **SuperSaaS** — Best budget fitness-friendly option
-   - ✅ Native Google Calendar sync
-   - ✅ Very affordable ($9/month, no per-seat fees)
-   - ✅ Custom intake forms (accessibility needs, emergency contacts)
-   - ✅ Waiting lists for popular slots
-   - ✅ Credit system for session packages
-   - ⚠️ QB via Zapier (acceptable)
-   - ⚠️ Interface is dated
+2. **Trafft** — Best free option with native Apple Calendar sync
+   - ✅ Two-way sync with Apple/iCal, Google, and Outlook calendars
+   - ✅ Free plan for teams up to 5
+   - ✅ WordPress plugin available
+   - ❌ Not fitness-specific
+   - ⚠️ QB via Zapier
    - Free tier available
 
-4. **Setmore** — Best if native QB export is valuable
-   - ✅ Native Google Calendar two-way sync
-   - ✅ Native QB Online integration (one-way export)
-   - ✅ Built-in payment processing
-   - ✅ Auto digital receipts
-   - ⚠️ QB is one-way only (acceptable for batch workflow)
+### Tier 2: Native Mobile Calendar Sync + Robust QB
+
+3. **Jobber** — Best for broad mobile calendar support
+   - ✅ Syncs to iPhone Calendar, Android Calendar, Google Calendar, Outlook
+   - ✅ Native QB Online integration
+   - ✅ Multi-trainer/team support
+   - ❌ Overkill for 30-client scale ($90+/month)
+   - ⚠️ Field service focus, not fitness-specific
+
+4. **Setmore** — Best budget native QB + iPhone sync
+   - ✅ 1-way iPhone Calendar sync via iCal subscription
+   - ✅ Native QB Online export
+   - ✅ Payment processing
+   - ⚠️ 1-way sync only (can't edit from phone calendar)
    - $12/month
+
+### Tier 3: Consider if Google Calendar App Is Acceptable
+
+5. **Calendly** — Best Google Calendar integration ONLY
+   - ❌ **REQUIRES Google Calendar app on iPhone** (no native iOS Calendar sync)
+   - ✅ Best Google Calendar integration overall
+   - ✅ Simplest booking experience
+   - ⚠️ QB via Zapier
+   - $8/month, 14-day Pro trial
+
+6. **HoneyBook** — All-in-one CRM with native mobile sync
+   - ✅ Direct iOS and Android calendar sync from mobile app
+   - ✅ Contracts, invoices, payments, project tracking
+   - ⚠️ QB integration unclear
+   - ❌ Not fitness-specific
+   - $39+/month
 
 ---
 
 ## Open Questions for Shaun
 
-Based on the requirements document (`enable-the-disabled-scheduling-requirements-questions.md`):
+1. **Phone calendar preference:** Do Shaun, Sean, and Charlotte use the **native iOS Calendar app** on iPhones (or native Android Calendar on Android phones), or the **Google Calendar app**? 
+   - If **native iOS/Android Calendar**: Calendly, SuperSaaS, SimplyBook are **disqualified**.
+   - If **Google Calendar app**: Calendly becomes viable.
 
-1. **Google Workspace usage:** Is the business currently using Google Workspace (Gmail, Calendar, Drive)? If not, this needs to be set up first.
+2. **QB edition:** QuickBooks Online or Desktop? (Most tools are QBO-only.)
 
-2. **QB edition:** QuickBooks Online or Desktop? If Desktop, most native QB integrations are unsupported — batch export may be the only path.
+3. **Current manual coordination time:** How much time is spent on scheduling coordination weekly? (Hours per week)
 
-3. **Client self-booking:** Should clients be able to self-book online, or does all booking go through Shaun? (Affects whether Calendly/Vagaro's self-booking is needed.)
+4. **Batch QB billing frequency:** How often is QB billing generated — weekly, monthly, or per-campaign?
 
-4. **Trainer calendar sync:** How critical is it that each trainer's schedule auto-syncs to their personal Google Calendar? (Vagaro and Calendly both do this natively.)
+5. **Client self-booking:** Should clients self-book online, or does all booking go through Shaun?
 
-5. **Batch QB billing frequency:** How often is QuickBooks billing generated — weekly, monthly, or per-campaign? (This determines the QB export workflow complexity.)
+6. **Trainer substitution needs:** How often do trainers need to hand off sessions to substitutes? (Affects R4 score)
 
-6. **Accessibility features:** Are there WCAG/ADA requirements for the booking page? If so, Vagaro's HIPAA compliance is closest, but general tools may need a WordPress plugin like SimplyBook.
-
-7. **Current manual coordination:** How much time is currently spent on scheduling coordination (texts, calls back and forth)? A quantified estimate helps justify the tool investment.
+7. **ADA/WCAG accessibility:** Are there accessibility requirements for the booking page?
 
 ---
 
 ## Next Steps
 
-1. **Answer the 7 questions** above
-2. **Select 1–2 shortlist tools** based on answers
+1. **Answer the 7 questions** above — particularly the phone calendar preference
+2. **Based on answers, select 1–2 shortlist tools** from the recommendations
 3. **Sign up for free trials** of the top candidates
-4. **Test Google Calendar sync** with 2–3 appointments
+4. **Test mobile calendar sync** with a real appointment on a test phone
 5. **Test notification workflow** (client booking → trainer notified → Shaun notified)
-6. **Test QB export path** (if batch QB billing is the workflow)
-7. **Evaluate the full cycle** with a real client + trainer + Shaun scenario
+6. **Test QB export path** (export appointments → QB invoices)
+7. **Score each tool** using the evaluation model
 
 ---
 
