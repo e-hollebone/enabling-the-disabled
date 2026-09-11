@@ -12,7 +12,7 @@
 1. **Fill out one row per session you deliver.** One row = one paid session.
 2. **Write the row immediately after the session ends** — same day, while it's fresh.
 3. **Shaun checks your row against the calendar** — every entry must match a scheduled appointment. Row matches = you get paid. Row doesn't match = held.
-4. **Row 2 is a gray example row** — it shows the format. Start typing on row 3.
+4. **Row 2 (A2) is a gray example row** — it shows the format. Start typing on row 3.
 
 ---
 
@@ -56,10 +56,10 @@ Who you trained. Must match the name on the calendar booking.
 ### Type
 **Tap the dropdown arrow** and pick one of the five options above. Don't type freehand.
 
-### Results
+### Highlights / Results
 1–2 sentences on what happened and how the client did. Examples:
 
-- "Upper body strength: 3x10 DB rows @35lb, client hit new rep count"
+- "Upper body circuit, client hit new rep count @ 35lb"
 - "Mobility focus today — client working through shoulder stiffness"
 - "Group of 4: completed band circuit, 2 clients set new PRs"
 
@@ -84,12 +84,12 @@ Rows that don't match the calendar or have blank results are held. To avoid dela
 ## Examples
 
 ### Good row
-| Date | Time | Client | Type | Results |
+| Date | Time | Client | Type | Highlights/Results |
 |------|------|--------|------|---------|
-| 2026-09-15 | 9:00 | Danny M. | Gym - 1:1 | Upper body circuit: 3x10 DB rows @35lb, client hit new rep count |
+| 2026-09-15 | 9:00 | Danny M. | Gym - 1:1 | Upper body circuit, client hit new rep count @ 35lb |
 
 ### Bad row (will be held)
-| Date | Time | Client | Type | Results |
+| Date | Time | Client | Type | Highlights/Results |
 |------|------|--------|------|---------|
 | 9/15/2026 | | Danny M | Gym 1:1 | did workout |
 
@@ -138,4 +138,4 @@ In the Operations folder of the shared Google Drive. You only need the Google Sh
 
 ## Questions?
 
-Ask Shaun. Text, not email. If you're ever unsure whether something counts as a valid session, **ask before you deliver**, not after.
+Questions: text Shaun. If there are any discrepancies, please note with a comment. If you're ever unsure whether something counts as a valid session, **ask before you deliver**, not after.
