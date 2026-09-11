@@ -52,7 +52,7 @@ Sessions must be classified by **location + format**:
 The date the session was delivered (not the date you're filling it in). Use `YYYY-MM-DD` format, e.g., `2026-09-15`.
 
 ### 2. Time
-Start and end time of the actual session (not when you arrived). Use 24-hour format, e.g., `10:00-11:00`.
+Start and end time of the actual session (not when you arrived). Use 24-hour format, e.g., `10:00-11:00`. On mobile, tap the clock icon in the keyboard for a time picker — just add the hyphen between start and end.
 
 ### 3. Client
 Name of the client you served. This is how Eric verifies against the calendar — use the name that appears in the calendar booking.
@@ -127,7 +127,7 @@ Issues: missing time, no Type (should use dropdown), missing Sched, vague result
 2. The sheet is already shared with you — look for **"Enable the Disabled - Session Time Record"**
 3. Tap the **+** at the bottom of the last row to add a new row
 4. Fill each column left-to-right
-5. For **Type** and **Trainer** columns, tap the cell and you'll see a dropdown arrow — tap it to pick from the list
+5. For **Type** column, tap the cell and you'll see a dropdown arrow — tap it to pick from the list
 6. **Pro tip:** Use voice-to-text for the Results column — tap the cell, tap the microphone on your keyboard, and speak your 1-2 sentence summary
 7. Switch to the **Quick Reference** tab anytime for a reminder of what each column needs
 
