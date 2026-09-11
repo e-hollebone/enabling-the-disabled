@@ -1,7 +1,7 @@
 # Enable the Disabled — Session Time Record: Instructions for Trainers
 
 **Prepared for:** Sean H., Charlotte, and any trainer delivering Enable the Disabled sessions
-**Prepared by:** Eric Hollebone / fitness-strategist
+**Prepared by:** fitness-strategist profile
 **Status:** Final — live in Google Drive
 **Purpose:** Every session you deliver must be recorded in this timesheet to get paid. If it's not in this sheet, you don't get paid for it.
 
@@ -11,7 +11,7 @@
 
 1. **Fill out one row per session you deliver.** One row = one paid session.
 2. **Write the row immediately after the session ends** — same day, while it's fresh.
-3. **Eric checks your row against the calendar** — every entry must match a scheduled appointment. Row matches = you get paid. Row doesn't match = held.
+3. **Shaun checks your row against the calendar** — every entry must match a scheduled appointment. Row matches = you get paid. Row doesn't match = held.
 4. **Row 2 is a gray example row** — it shows the format. Start typing on row 3.
 
 ---
@@ -63,13 +63,13 @@ Who you trained. Must match the name on the calendar booking.
 - "Mobility focus today — client working through shoulder stiffness"
 - "Group of 4: completed band circuit, 2 clients set new PRs"
 
-**This can't be blank.** If you just wrote "did workout" or nothing at all, Eric will hold the row.
+**This can't be blank.** If you just wrote "did workout" or nothing at all, Shaun will hold the row.
 
 ---
 
 ## Payroll Connection
 
-Every week, Eric:
+Every week, Shaun:
 1. Filters for the pay period date range
 2. Checks each row against the calendar appointment
 3. Pays for rows that match
@@ -116,11 +116,11 @@ The sheet is designed for phone use. Here's how:
 
 ## Gotchas
 
-1. **No calendar match = no pay.** If the session isn't on the calendar, Eric can't verify it. Check the calendar before you deliver.
+1. **No calendar match = no pay.** If the session isn't on the calendar, Shaun can't verify it. Check the calendar before you deliver.
 
 2. **Results can't be blank.** "Did workout" is not a result. Say what you did and how it went.
 
-3. **Same-day entries preferred.** Anything older than 48 hours needs Eric's OK before payment.
+3. **Same-day entries preferred.** Anything older than 48 hours needs Shaun's OK before payment.
 
 4. **Group sessions** — put "Group: [Client1, Client2]" in the Client column.
 
@@ -138,4 +138,4 @@ In the Operations folder of the shared Google Drive. You only need the Google Sh
 
 ## Questions?
 
-Ask Eric. Text, not email. If you're ever unsure whether something counts as a valid session, **ask before you deliver**, not after.
+Ask Shaun. Text, not email. If you're ever unsure whether something counts as a valid session, **ask before you deliver**, not after.
