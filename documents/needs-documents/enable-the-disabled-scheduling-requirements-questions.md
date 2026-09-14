@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Enable the Disabled - Business Requirements Discovery Questions"
+description: "# Enable the Disabled - Business Requirements Discovery Questions"
+tags: ["scheduling", "questions", "requirements", "disabled", "enable"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Enable the Disabled - Business Requirements Discovery Questions
 
 **Prepared for: Shaun Kehoe**  

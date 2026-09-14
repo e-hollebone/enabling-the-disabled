@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Brand (Shared) — README"
+description: "# Brand (Shared) — README"
+tags: ["brand", "readme", "shared"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Brand (Shared) — README
 
 **Parent:** `Enable the Disabled - Shaun Kehoe` (`17Sav0cJmDafe8DDvHKKq0OT1awzQ0ik8`)

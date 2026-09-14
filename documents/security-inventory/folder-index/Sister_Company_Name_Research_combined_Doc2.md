@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Sister Company Name Research — FINAL COMBINED REPORT for "Enable the Disabled" (Not-for-Profit)"
+description: "# Sister Company Name Research — FINAL COMBINED REPORT for "Enable the Disabled" (Not-for-Profit)"
+tags: ["research", "combined", "sister", "doc2", "company"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Sister Company Name Research — FINAL COMBINED REPORT for "Enable the Disabled" (Not-for-Profit)
 
 **Prepared for:** Enable the Disabled / Shaun Kehoe  

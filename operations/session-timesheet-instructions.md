@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Enable the Disabled — Session Time Record: Instructions for Trainers"
+description: "# Enable the Disabled — Session Time Record: Instructions for Trainers"
+tags: ["timesheet", "session", "instructions"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Enable the Disabled — Session Time Record: Instructions for Trainers
 
 **Prepared for:** Sean H., Charlotte, and any trainer delivering Enable the Disabled sessions

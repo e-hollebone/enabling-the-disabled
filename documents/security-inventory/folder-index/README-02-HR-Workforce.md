@@ -1,3 +1,16 @@
+---
+type: Document
+title: "02_HR-Workforce (Shared) — README"
+description: "# 02_HR-Workforce (Shared) — README"
+tags: ["workforce", "readme"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # 02_HR-Workforce (Shared) — README
 
 **Parent:** `Operations` (Shared) (`1wgqw4-IReNIMFov73r5DCEpvt7Mm9q1y`)

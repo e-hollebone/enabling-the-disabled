@@ -1,3 +1,16 @@
+---
+type: Document
+title: "_archive (Shared) — README"
+description: "# _archive (Shared) — README"
+tags: ["archive", "readme", "shared"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # _archive (Shared) — README
 
 **Parent:** `Enable the Disabled - Shaun Kehoe` (`17Sav0cJmDafe8DDvHKKq0OT1awzQ0ik8`)

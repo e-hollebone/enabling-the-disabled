@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Journal"
+description: "# Journal"
+tags: ["journal"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Journal
 
 Time-based record of major interactions and initiatives. Each entry captures what happened, when, and what it means for the business.

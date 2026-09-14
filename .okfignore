@@ -1,0 +1,14 @@
+# OKF Ignore File
+.git/
+.gitignore
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.egg-info/
+.okf-hashes.json
+*.pyc
+*.pyo
+CHANGELOG.md
+LICENSE.md
+LICENSE

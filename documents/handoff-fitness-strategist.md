@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Handoff — fitness-strategist Profile & Enabling-the-Disabled Repo"
+description: "# Handoff — fitness-strategist Profile & Enabling-the-Disabled Repo"
+tags: ["strategist", "handoff", "fitness"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Handoff — fitness-strategist Profile & Enabling-the-Disabled Repo
 
 **Prepared:** 2026-08-27  

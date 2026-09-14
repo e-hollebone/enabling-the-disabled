@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Project Context"
+description: "# Project Context"
+tags: ["agents"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Project Context
 
 This repo holds the growing document set for a personal training + gym delivery fitness business.

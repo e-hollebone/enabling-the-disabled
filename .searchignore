@@ -1,0 +1,7 @@
+# .searchignore — opt out of the homelab_search() mandate
+#
+# This repo uses normal tools (search_files, read_file) instead of
+# the OKF vector ladder because it doesn't use the OKF index.
+#
+# Patterns are gitignore-style:
+#   *           = exempt everything in this repo

@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Building Your Business Profile — Round 1 of 3"
+description: "# Building Your Business Profile — Round 1 of 3"
+tags: ["shaun", "questions", "round"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Building Your Business Profile — Round 1 of 3
 
 Hi Shaun — this is the first short set of questions so I can build a proper business profile for Enable the Disabled. It takes about 15 minutes. Answer what you can; rough numbers are fine. There will be two rounds after this.

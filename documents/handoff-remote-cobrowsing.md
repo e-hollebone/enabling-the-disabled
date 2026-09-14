@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Handoff — Remote Co-Browsing via Guacamole MCP"
+description: "# Handoff — Remote Co-Browsing via Guacamole MCP"
+tags: ["remote", "handoff", "cobrowsing"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Handoff — Remote Co-Browsing via Guacamole MCP
 
 **Date:** 2026-08-27  

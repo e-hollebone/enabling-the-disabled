@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Profile Identity — fitness-strategist"
+description: "# Profile Identity — fitness-strategist"
+tags: ["profile", "identity"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Profile Identity — fitness-strategist
 
 This document is the canonical source of truth for the `fitness-strategist` Hermes profile that authors documents in this repo. The runtime copy lives at `~/.hermes/profiles/fitness-strategist/SOUL.md`; this file is the tracked reference.

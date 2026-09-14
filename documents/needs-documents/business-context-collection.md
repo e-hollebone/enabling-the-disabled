@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Business Context Collection"
+description: "# Business Context Collection"
+tags: ["collection", "business", "context"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Business Context Collection
 
 **Status:** In progress — collection phase  

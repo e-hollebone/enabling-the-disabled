@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Enable the Disabled — Google Drive Structure & Repo Mirror"
+description: "# Enable the Disabled — Google Drive Structure & Repo Mirror"
+tags: ["structure", "drive"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Enable the Disabled — Google Drive Structure & Repo Mirror
 
 **Last updated:** 2026-09-11  

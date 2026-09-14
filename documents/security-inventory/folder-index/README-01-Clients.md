@@ -1,3 +1,16 @@
+---
+type: Document
+title: "01_Clients (Shared) — README"
+description: "# 01_Clients (Shared) — README"
+tags: ["readme", "clients"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # 01_Clients (Shared) — README
 
 **Parent:** `Operations` (Shared) (`1wgqw4-IReNIMFov73r5DCEpvt7Mm9q1y`)

@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Trademark (Shared) — README"
+description: "# Trademark (Shared) — README"
+tags: ["trademark", "readme", "shared"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Trademark (Shared) — README
 
 **Parent:** `Corporate` (Shared) (`1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-O`)

@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Social Media & Website Analysis — Point in Time"
+description: "# Social Media & Website Analysis — Point in Time"
+tags: ["media", "analysis", "website", "social"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Social Media & Website Analysis — Point in Time
 
 **Date:** 2026-08-27  

@@ -1,3 +1,16 @@
+---
+type: Template
+title: "[Folder Name] — README"
+description: "# [Folder Name] — README"
+tags: ["template", "readme", "folder"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # [Folder Name] — README
 
 **Parent:** [Parent Folder Name] ([parent_folder_id])

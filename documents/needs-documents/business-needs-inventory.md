@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Business Needs Inventory"
+description: "# Business Needs Inventory"
+tags: ["business", "inventory", "needs"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Business Needs Inventory
 
 **Status:** Draft — collection phase  

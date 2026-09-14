@@ -1,3 +1,16 @@
+---
+type: Research
+title: "Calendar & Appointment Scheduling Software Research"
+description: "# Calendar & Appointment Scheduling Software Research **For: Enable the Disabled**   **Prepared by: "
+tags: ["calendar", "software", "research", "appointment", "hermes"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Calendar & Appointment Scheduling Software Research
 **For: Enable the Disabled**  
 **Prepared by: Eric Hollebone / Hermes Agent**  

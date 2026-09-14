@@ -1,3 +1,16 @@
+---
+type: Document
+title: "name search (Shared) — README"
+description: "# name search (Shared) — README"
+tags: ["shared", "readme", "name", "search"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # name search (Shared) — README
 
 **Parent:** `Incorporation` (Shared #1) (`1w2On6DibxG5z0REfgLoBYUEkERwkgSAU`)

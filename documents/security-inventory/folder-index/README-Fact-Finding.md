@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Fact-finding (Shared) — README"
+description: "# Fact-finding (Shared) — README"
+tags: ["readme", "fact", "finding"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Fact-finding (Shared) — README
 
 **Parent:** `Corporate` (Shared) (`1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-O`)

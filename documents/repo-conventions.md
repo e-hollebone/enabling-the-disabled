@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Repo Conventions"
+description: "# Repo Conventions"
+tags: ["conventions", "repo"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Repo Conventions
 
 *Auto-generated reference — last updated by fitness-strategist*

@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Enable the Disabled - Shaun Kehoe — README"
+description: "# Enable the Disabled - Shaun Kehoe — README"
+tags: ["root", "readme", "shared"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Enable the Disabled - Shaun Kehoe — README
 
 **Parent:** My Drive > Clients

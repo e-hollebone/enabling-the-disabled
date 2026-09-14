@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Facebook Analysis — Shaun Kehoe's Personal Training (`SPFKPT33`)"
+description: "# Facebook Analysis — Shaun Kehoe's Personal Training ()"
+tags: ["analysis", "facebook"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Facebook Analysis — Shaun Kehoe's Personal Training (`SPFKPT33`)
 
 **Source page:** https://www.facebook.com/SPFKPT33/

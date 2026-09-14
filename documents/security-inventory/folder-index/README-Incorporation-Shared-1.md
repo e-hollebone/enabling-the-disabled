@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Incorporation #1 (Shared) — README"
+description: "# Incorporation #1 (Shared) — README"
+tags: ["incorporation", "readme", "shared"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Incorporation #1 (Shared) — README
 
 **Parent:** `Corporate` (Shared) (`1dRr76f_xiGQvmnaAAMmSf1IjYhlNeT-O`)

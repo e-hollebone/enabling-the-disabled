@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Google Sheets API v4 — batchUpdate Field-Name Gotchas"
+description: "# Google Sheets API v4 — batchUpdate Field-Name Gotchas"
+tags: ["batchupdate", "sheets"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Google Sheets API v4 — batchUpdate Field-Name Gotchas
 
 Common 400 errors when using `spreadsheets.batchUpdate` with `urllib`/raw JSON.

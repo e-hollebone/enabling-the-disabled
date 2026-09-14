@@ -1,3 +1,16 @@
+---
+type: Document
+title: "08_Security (Admin) — README"
+description: "# 08_Security (Admin) — README"
+tags: ["readme", "admin", "security"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # 08_Security (Admin) — README
 
 **Parent:** `Corporate` (Admin) (`1tH7rTwRGkjaj8KrZheNAkyLBSEkCdM4x`)

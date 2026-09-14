@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Enabling the Disabled - Admin — README"
+description: "# Enabling the Disabled - Admin — README"
+tags: ["root", "readme", "admin"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Enabling the Disabled - Admin — README
 
 **Parent:** My Drive > Clients

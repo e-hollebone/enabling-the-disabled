@@ -1,3 +1,16 @@
+---
+type: Research
+title: "Calendar & Appointment Software Evaluation Model"
+description: "# Calendar & Appointment Software Evaluation Model"
+tags: ["calendar", "model", "evaluation"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Calendar & Appointment Software Evaluation Model
 
 **For:** Enable the Disabled scheduling tool selection  

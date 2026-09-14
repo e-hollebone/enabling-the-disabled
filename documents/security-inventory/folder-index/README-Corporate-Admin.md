@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Corporate (Admin) — README"
+description: "# Corporate (Admin) — README"
+tags: ["readme", "admin", "corporate"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Corporate (Admin) — README
 
 **Parent:** `Enabling the Disabled - Admin` (`1_YpciYU1uRS53ol74oqojUKlUKSQF4BJ`)

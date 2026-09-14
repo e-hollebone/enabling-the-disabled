@@ -1,3 +1,16 @@
+---
+type: Document
+title: "Current State Assessment"
+description: "# Current State Assessment"
+tags: ["assessment", "state", "current"]
+generated:
+  by: agent:hermes
+  at: 2026-09-14
+  confidence: auto-low-confidence
+stale_after: 2027-09-14
+status: stable
+---
+
 # Current State Assessment
 
 **Status:** Not started — waits for business context collection  
