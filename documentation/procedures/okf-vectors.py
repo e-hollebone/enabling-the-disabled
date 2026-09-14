@@ -119,20 +119,22 @@ def _get_llama_url() -> str:
     )
 
 def _get_db_path() -> str:
+    """Default to .okf-vectors.db in the repo root (where this script lives)."""
+    repo_root = Path(__file__).resolve().parent.parent.parent
     return os.environ.get(
-        "OKF_VECTORS_DB", "/home/hermes/homelab/.okf-vectors.db"
+        "OKF_VECTORS_DB", str(repo_root / ".okf-vectors.db")
     )
 
 def _get_repo_root() -> str:
-    """Root of the homelab repo — the full tree is indexed, not just documentation/."""
+    """Root of the repo — the full tree is indexed, not just documentation/."""
+    repo_root = Path(__file__).resolve().parent.parent.parent
     return os.environ.get(
-        "HOME_LAB_REPO_ROOT", str(REPO_ROOT)
+        "HOME_LAB_REPO_ROOT", str(repo_root)
     )
 
-def _get_obsidian_vault_root() -> str:
-    return os.environ.get(
-        "OBSIDIAN_VAULT_ROOT", "/home/hermes/vault"
-    )
+def _get_obsidian_vault_root() -> str | None:
+    """Obsidian vault root — set env var to enable vault indexing."""
+    return os.environ.get("OBSIDIAN_VAULT_ROOT")
 
 # Module-level defaults (backward-compatible — functions read env at call time)
 LLAMA_URL = _get_llama_url()
@@ -739,39 +741,41 @@ def collect_docs():
             "directory": rel_dir,
         })
 
-    # Obsidian vault
-    md_files = glob.glob(f"{_get_obsidian_vault_root()}/**/*.md", recursive=True)
-    for filepath in sorted(md_files):
-        if filepath in seen_paths:
-            continue
-        seen_paths.add(filepath)
-        with open(filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
-        frontmatter, body = parse_frontmatter(content)
-        plain_content = get_content_for_embedding(body)
-        title = extract_title(filepath, body, frontmatter)
-        doc_id = "obsidian_" + hashlib.md5(filepath.encode()).hexdigest()[:16]
+    # Obsidian vault (optional — only if OBSIDIAN_VAULT_ROOT is set)
+    vault_root = _get_obsidian_vault_root()
+    if vault_root:
+        md_files = glob.glob(f"{vault_root}/**/*.md", recursive=True)
+        for filepath in sorted(md_files):
+            if filepath in seen_paths:
+                continue
+            seen_paths.add(filepath)
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+            frontmatter, body = parse_frontmatter(content)
+            plain_content = get_content_for_embedding(body)
+            title = extract_title(filepath, body, frontmatter)
+            doc_id = "obsidian_" + hashlib.md5(filepath.encode()).hexdigest()[:16]
 
-        try:
-            directory = str(Path(filepath).parent.relative_to(_get_obsidian_vault_root()))
-        except ValueError:
-            directory = str(Path(filepath).parent)
+            try:
+                directory = str(Path(filepath).parent.relative_to(vault_root))
+            except ValueError:
+                directory = str(Path(filepath).parent)
 
-        docs.append({
-            "id": doc_id,
-            "title": title,
-            "description": as_str(frontmatter.get('description')),
-            "content": plain_content,
-            "type": "Note",
-            "tags": json.dumps(coerce_tags(frontmatter.get('tags'))),
-            "status": "active",
-            "stale_after": "",
-            "generated": "",
-            "verified": format_verified(frontmatter.get('verified')),
-            "content_hash": content_hash(content),
-            "source_path": filepath,
-            "directory": directory,
-        })
+            docs.append({
+                "id": doc_id,
+                "title": title,
+                "description": as_str(frontmatter.get('description')),
+                "content": plain_content,
+                "type": "Note",
+                "tags": json.dumps(coerce_tags(frontmatter.get('tags'))),
+                "status": "active",
+                "stale_after": "",
+                "generated": "",
+                "verified": format_verified(frontmatter.get('verified')),
+                "content_hash": content_hash(content),
+                "source_path": filepath,
+                "directory": directory,
+            })
 
     return docs
 
@@ -783,7 +787,7 @@ def index_docs(force: bool = False):
     skipped, and only new/changed files are embedded. Pass force=True to
     delete all rows and rebuild the index from scratch.
     """
-    print("=== OKF Vector Index — Indexing homelab docs + Obsidian vault ===")
+    print("=== OKF Vector Index — Indexing OKF repo ===")
     print(f"llama.cpp endpoint: {_get_llama_url()}")
     print(f"Database: {_get_db_path()}")
 
